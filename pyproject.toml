@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nocode-agent-builder"
+version = "0.1.0"
+description = "LangGraph agents with corrective RAG that drive a no-code platform from plain English"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "httpx>=0.27",
+    "sqlalchemy>=2.0",
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    "jsonschema>=4.21",
+    "typer>=0.12",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+agent = [
+    "langgraph>=0.2",
+    "langgraph-checkpoint-sqlite>=2.0",
+    "langchain-core>=0.3",
+    "langchain-anthropic>=0.3",
+    "langsmith>=0.1.140",
+]
+rag = [
+    "chromadb>=0.5",
+    "rank-bm25>=0.2.2",
+    "sentence-transformers>=3.0",
+    "numpy>=1.26",
+]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+builder = "nocode_agent.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["nocode_agent*", "mockplatform*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
