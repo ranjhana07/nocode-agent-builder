@@ -1,0 +1,16 @@
+.venv/
+venv/
+venv-*/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+chroma_data/
+.chroma/
+*.db
+*.sqlite
+*.sqlite3
+.env
+.ruff_cache/
