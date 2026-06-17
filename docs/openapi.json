@@ -1,0 +1,1387 @@
+{
+  "components": {
+    "schemas": {
+      "AppCreate": {
+        "properties": {
+          "description": {
+            "default": "",
+            "description": "Short description of what the app does",
+            "maxLength": 500,
+            "title": "Description",
+            "type": "string"
+          },
+          "name": {
+            "description": "Unique display name of the app",
+            "maxLength": 120,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "template": {
+            "default": "blank",
+            "description": "Starter template the app is created from",
+            "enum": [
+              "blank",
+              "crm",
+              "inventory",
+              "blog"
+            ],
+            "title": "Template",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "AppCreate",
+        "type": "object"
+      },
+      "AppOut": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "template": {
+            "title": "Template",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "template"
+        ],
+        "title": "AppOut",
+        "type": "object"
+      },
+      "AuthFlowCreate": {
+        "properties": {
+          "method": {
+            "description": "Sign in method offered to end users",
+            "enum": [
+              "email_password",
+              "magic_link",
+              "oauth_google",
+              "oauth_github"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "require_verification": {
+            "default": true,
+            "description": "Require email verification before first sign in",
+            "title": "Require Verification",
+            "type": "boolean"
+          },
+          "roles": {
+            "description": "Roles available in the app",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "method"
+        ],
+        "title": "AuthFlowCreate",
+        "type": "object"
+      },
+      "AuthFlowOut": {
+        "properties": {
+          "app_id": {
+            "title": "App Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "require_verification": {
+            "title": "Require Verification",
+            "type": "boolean"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "app_id",
+          "method",
+          "require_verification",
+          "roles"
+        ],
+        "title": "AuthFlowOut",
+        "type": "object"
+      },
+      "ComponentCreate": {
+        "properties": {
+          "position": {
+            "default": 0,
+            "description": "Zero based slot on the page",
+            "maximum": 200.0,
+            "minimum": 0.0,
+            "title": "Position",
+            "type": "integer"
+          },
+          "props": {
+            "additionalProperties": true,
+            "description": "Component specific properties",
+            "title": "Props",
+            "type": "object"
+          },
+          "type": {
+            "description": "Kind of component to place on the page",
+            "enum": [
+              "text",
+              "button",
+              "image",
+              "table_view",
+              "form",
+              "chart",
+              "list"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "ComponentCreate",
+        "type": "object"
+      },
+      "ComponentOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "page_id": {
+            "title": "Page Id",
+            "type": "integer"
+          },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "props": {
+            "additionalProperties": true,
+            "title": "Props",
+            "type": "object"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "page_id",
+          "type",
+          "props",
+          "position"
+        ],
+        "title": "ComponentOut",
+        "type": "object"
+      },
+      "DatabaseCreate": {
+        "properties": {
+          "app_id": {
+            "description": "App that owns the database",
+            "minimum": 1.0,
+            "title": "App Id",
+            "type": "integer"
+          },
+          "name": {
+            "description": "Database name, unique within the app",
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_id",
+          "name"
+        ],
+        "title": "DatabaseCreate",
+        "type": "object"
+      },
+      "DatabaseOut": {
+        "properties": {
+          "app_id": {
+            "title": "App Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "app_id",
+          "name"
+        ],
+        "title": "DatabaseOut",
+        "type": "object"
+      },
+      "FieldCreate": {
+        "properties": {
+          "default": {
+            "description": "Value used when a record omits the field",
+            "title": "Default"
+          },
+          "enum_values": {
+            "description": "Allowed values when type is enum",
+            "items": {
+              "type": "string"
+            },
+            "title": "Enum Values",
+            "type": "array"
+          },
+          "name": {
+            "description": "Field name in snake_case",
+            "maxLength": 80,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Name",
+            "type": "string"
+          },
+          "required": {
+            "default": false,
+            "description": "Reject records that leave the field empty",
+            "title": "Required",
+            "type": "boolean"
+          },
+          "type": {
+            "description": "Data type of the field",
+            "enum": [
+              "text",
+              "integer",
+              "float",
+              "boolean",
+              "date",
+              "datetime",
+              "email",
+              "enum"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "title": "FieldCreate",
+        "type": "object"
+      },
+      "FieldOut": {
+        "properties": {
+          "enum_values": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Enum Values",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "required": {
+            "title": "Required",
+            "type": "boolean"
+          },
+          "table_id": {
+            "title": "Table Id",
+            "type": "integer"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "table_id",
+          "name",
+          "type",
+          "required",
+          "enum_values"
+        ],
+        "title": "FieldOut",
+        "type": "object"
+      },
+      "FormBinding": {
+        "properties": {
+          "field_mapping": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Maps form input names to table field names",
+            "title": "Field Mapping",
+            "type": "object"
+          },
+          "table_id": {
+            "description": "Table that receives submissions",
+            "minimum": 1.0,
+            "title": "Table Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "table_id"
+        ],
+        "title": "FormBinding",
+        "type": "object"
+      },
+      "FormCreate": {
+        "properties": {
+          "fields": {
+            "description": "Input names, in display order",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 40,
+            "minItems": 1,
+            "title": "Fields",
+            "type": "array"
+          },
+          "name": {
+            "description": "Form name, shown as its heading",
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "submit_label": {
+            "default": "Submit",
+            "description": "Text on the submit button",
+            "maxLength": 40,
+            "title": "Submit Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "fields"
+        ],
+        "title": "FormCreate",
+        "type": "object"
+      },
+      "FormOut": {
+        "properties": {
+          "app_id": {
+            "title": "App Id",
+            "type": "integer"
+          },
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "submit_label": {
+            "title": "Submit Label",
+            "type": "string"
+          },
+          "table_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Table Id"
+          }
+        },
+        "required": [
+          "id",
+          "app_id",
+          "name",
+          "fields",
+          "submit_label"
+        ],
+        "title": "FormOut",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "PageCreate": {
+        "properties": {
+          "layout": {
+            "default": "single",
+            "description": "Layout grid used by the page",
+            "enum": [
+              "single",
+              "two_column",
+              "dashboard"
+            ],
+            "title": "Layout",
+            "type": "string"
+          },
+          "slug": {
+            "description": "URL segment, lowercase letters, digits and dashes",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9-]+$",
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "description": "Page title shown in the browser tab",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "slug"
+        ],
+        "title": "PageCreate",
+        "type": "object"
+      },
+      "PageOut": {
+        "properties": {
+          "app_id": {
+            "title": "App Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "layout": {
+            "title": "Layout",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "app_id",
+          "title",
+          "slug",
+          "layout"
+        ],
+        "title": "PageOut",
+        "type": "object"
+      },
+      "PublishOut": {
+        "properties": {
+          "app_id": {
+            "title": "App Id",
+            "type": "integer"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_id",
+          "environment",
+          "url"
+        ],
+        "title": "PublishOut",
+        "type": "object"
+      },
+      "PublishRequest": {
+        "properties": {
+          "custom_domain": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Custom domain, production only",
+            "title": "Custom Domain"
+          },
+          "environment": {
+            "default": "staging",
+            "description": "Target environment",
+            "enum": [
+              "staging",
+              "production"
+            ],
+            "title": "Environment",
+            "type": "string"
+          }
+        },
+        "title": "PublishRequest",
+        "type": "object"
+      },
+      "RelationCreate": {
+        "properties": {
+          "field_name": {
+            "description": "Name of the reference field",
+            "maxLength": 80,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Field Name",
+            "type": "string"
+          },
+          "from_table_id": {
+            "description": "Table that holds the reference",
+            "minimum": 1.0,
+            "title": "From Table Id",
+            "type": "integer"
+          },
+          "kind": {
+            "description": "Cardinality of the relation",
+            "enum": [
+              "one_to_many",
+              "many_to_many",
+              "one_to_one"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "to_table_id": {
+            "description": "Table being referenced",
+            "minimum": 1.0,
+            "title": "To Table Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "from_table_id",
+          "to_table_id",
+          "kind",
+          "field_name"
+        ],
+        "title": "RelationCreate",
+        "type": "object"
+      },
+      "RelationOut": {
+        "properties": {
+          "field_name": {
+            "title": "Field Name",
+            "type": "string"
+          },
+          "from_table_id": {
+            "title": "From Table Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "to_table_id": {
+            "title": "To Table Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "from_table_id",
+          "to_table_id",
+          "kind",
+          "field_name"
+        ],
+        "title": "RelationOut",
+        "type": "object"
+      },
+      "SeedRecords": {
+        "properties": {
+          "records": {
+            "description": "Rows to insert, one object per row",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "title": "Records",
+            "type": "array"
+          }
+        },
+        "required": [
+          "records"
+        ],
+        "title": "SeedRecords",
+        "type": "object"
+      },
+      "SeedResult": {
+        "properties": {
+          "inserted": {
+            "title": "Inserted",
+            "type": "integer"
+          },
+          "table_id": {
+            "title": "Table Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "table_id",
+          "inserted"
+        ],
+        "title": "SeedResult",
+        "type": "object"
+      },
+      "TableCreate": {
+        "properties": {
+          "name": {
+            "description": "Table name in snake_case",
+            "maxLength": 80,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Name",
+            "type": "string"
+          },
+          "primary_key": {
+            "default": "id",
+            "description": "Name of the primary key column",
+            "maxLength": 80,
+            "title": "Primary Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "TableCreate",
+        "type": "object"
+      },
+      "TableOut": {
+        "properties": {
+          "database_id": {
+            "title": "Database Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "primary_key": {
+            "title": "Primary Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "database_id",
+          "name",
+          "primary_key"
+        ],
+        "title": "TableOut",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Workflow API of the Nocode platform: apps, pages, databases, forms, auth and publishing.",
+    "title": "Nocode Platform API",
+    "version": "1.4.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/apps": {
+      "post": {
+        "operationId": "create_app",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create App",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/{app_id}/auth": {
+      "post": {
+        "operationId": "create_auth_flow",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "app_id",
+            "required": true,
+            "schema": {
+              "title": "App Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthFlowCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthFlowOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Auth Flow",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/apps/{app_id}/forms": {
+      "post": {
+        "operationId": "create_form",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "app_id",
+            "required": true,
+            "schema": {
+              "title": "App Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Form",
+        "tags": [
+          "forms"
+        ]
+      }
+    },
+    "/apps/{app_id}/pages": {
+      "post": {
+        "operationId": "create_page",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "app_id",
+            "required": true,
+            "schema": {
+              "title": "App Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PageCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Page",
+        "tags": [
+          "pages"
+        ]
+      }
+    },
+    "/apps/{app_id}/publish": {
+      "post": {
+        "operationId": "publish_site",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "app_id",
+            "required": true,
+            "schema": {
+              "title": "App Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Publish Site",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/databases": {
+      "post": {
+        "operationId": "create_database",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatabaseCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Database",
+        "tags": [
+          "data"
+        ]
+      }
+    },
+    "/databases/{database_id}/tables": {
+      "post": {
+        "operationId": "create_table",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "database_id",
+            "required": true,
+            "schema": {
+              "title": "Database Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TableCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Table",
+        "tags": [
+          "data"
+        ]
+      }
+    },
+    "/forms/{form_id}/binding": {
+      "post": {
+        "operationId": "bind_form_to_table",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "form_id",
+            "required": true,
+            "schema": {
+              "title": "Form Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormBinding"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Bind Form To Table",
+        "tags": [
+          "forms"
+        ]
+      }
+    },
+    "/pages/{page_id}/components": {
+      "post": {
+        "operationId": "add_component",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "page_id",
+            "required": true,
+            "schema": {
+              "title": "Page Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComponentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComponentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Component",
+        "tags": [
+          "pages"
+        ]
+      }
+    },
+    "/relations": {
+      "post": {
+        "operationId": "create_relation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RelationOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Relation",
+        "tags": [
+          "data"
+        ]
+      }
+    },
+    "/tables/{table_id}/fields": {
+      "post": {
+        "operationId": "add_field",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "table_id",
+            "required": true,
+            "schema": {
+              "title": "Table Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Field",
+        "tags": [
+          "data"
+        ]
+      }
+    },
+    "/tables/{table_id}/records": {
+      "post": {
+        "operationId": "seed_records",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "table_id",
+            "required": true,
+            "schema": {
+              "title": "Table Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeedRecords"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeedResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Seed Records",
+        "tags": [
+          "data"
+        ]
+      }
+    }
+  }
+}
