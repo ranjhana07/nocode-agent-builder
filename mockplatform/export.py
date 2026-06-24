@@ -10,8 +10,8 @@ from mockplatform.main import create_platform_app
 def export_openapi(target: Path) -> None:
     spec = create_platform_app("sqlite://").openapi()
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(spec, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="
-")
+    payload = json.dumps(spec, indent=2, sort_keys=True) + "\n"
+    target.write_text(payload, encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
