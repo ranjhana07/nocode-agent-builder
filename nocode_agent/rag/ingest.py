@@ -1,0 +1,42 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from nocode_agent.rag.openapi_splitter import split_openapi
+from nocode_agent.rag.splitter import SplitterConfig, split_markdown
+from nocode_agent.rag.types import Chunk
+from nocode_agent.rag.vector_store import VectorIndex
+
+
+def load_markdown_chunks(docs_dir: Path, config: SplitterConfig | None = None) -> list[Chunk]:
+    chunks: list[Chunk] = []
+    for path in sorted(docs_dir.rglob("*.md")):
+        source = path.relative_to(docs_dir).as_posix()
+        chunks.extend(split_markdown(path.read_text(encoding="utf-8"), source, config))
+    return chunks
+
+
+def load_openapi_chunks(openapi_path: Path, docs_dir: Path) -> list[Chunk]:
+    if not openapi_path.exists():
+        return []
+    spec = json.loads(openapi_path.read_text(encoding="utf-8"))
+    try:
+        source = openapi_path.resolve().relative_to(docs_dir.resolve()).as_posix()
+    except ValueError:
+        source = openapi_path.name
+    return split_openapi(spec, source)
+
+
+def load_corpus(docs_dir: Path, openapi_path: Path, config: SplitterConfig | None = None) -> list[Chunk]:
+    return load_markdown_chunks(docs_dir, config) + load_openapi_chunks(openapi_path, docs_dir)
+
+
+def ingest_corpus(
+    index: VectorIndex, docs_dir: Path, openapi_path: Path, reset: bool = False, config: SplitterConfig | None = None
+) -> int:
+    if reset:
+        index.reset()
+    chunks = load_corpus(docs_dir, openapi_path, config)
+    index.add(chunks)
+    return len(chunks)
