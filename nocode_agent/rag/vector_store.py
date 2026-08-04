@@ -6,7 +6,7 @@ import numpy as np
 from langchain_core.embeddings import Embeddings
 
 from nocode_agent.config import Settings
-from nocode_agent.rag.filters import MetadataFilter, apply_filter
+from nocode_agent.rag.filters import MetadataFilter
 from nocode_agent.rag.types import Chunk, ScoredChunk
 
 
@@ -117,7 +117,3 @@ class ChromaVectorIndex:
     def reset(self) -> None:
         self.client.delete_collection(self.collection_name)
         self.collection = self._open()
-
-
-def select_chunks(chunks: list[Chunk], metadata_filter: MetadataFilter | None) -> list[Chunk]:
-    return apply_filter(chunks, metadata_filter)
