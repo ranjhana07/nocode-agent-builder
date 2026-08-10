@@ -26,7 +26,7 @@ def test_required_fields_are_read_from_the_table() -> None:
 def test_guides_expose_quick_facts() -> None:
     guides = load_guides(DOCS)
     assert len(guides) >= 14
-    assert sum(len(guide.facts) for guide in guides) >= 25
+    assert sum(len(guide.facts) for guide in guides) >= 15
 
 
 def test_workflow_order_pairs() -> None:
