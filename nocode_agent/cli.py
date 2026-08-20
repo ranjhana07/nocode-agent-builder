@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import typer
 
 from nocode_agent.config import get_settings
+from nocode_agent.evals.retrieval_runner import run_retrieval_eval
+from nocode_agent.rag.eval import format_table
 from nocode_agent.rag.filters import MetadataFilter
 from nocode_agent.rag.ingest import ingest_corpus
 from nocode_agent.rag.service import build_index, build_rag_stack
@@ -39,6 +43,28 @@ def search(
         result = stack.retriever.hybrid(query, k, metadata_filter, multi_query=False)
     for rank, hit in enumerate(result.hits, start=1):
         typer.echo(f"{rank}. [{hit.score:.3f}] {hit.chunk.id}  ({hit.chunk.metadata['section']})")
+
+
+eval_app = typer.Typer(help="Run evaluations", no_args_is_help=True)
+app.add_typer(eval_app, name="eval")
+
+
+@eval_app.command("retrieval")
+def eval_retrieval(
+    in_memory: bool = typer.Option(False, "--in-memory"),
+    multi_query: bool = typer.Option(False, "--multi-query", help="Include the multi-query system, needs an LLM key"),
+    limit: int | None = typer.Option(None, "--limit"),
+    results_dir: Path = typer.Option(Path("results"), "--results-dir"),
+) -> None:
+    settings = get_settings()
+    llm = None
+    if multi_query:
+        from nocode_agent.llm import build_chat_model
+
+        llm = build_chat_model(settings)
+    stack = build_rag_stack(settings, llm=llm, persistent=not in_memory)
+    results = run_retrieval_eval(stack.retriever, settings, multi_query, results_dir, limit)
+    typer.echo(format_table(results))
 
 
 if __name__ == "__main__":
