@@ -39,3 +39,21 @@ class FakeChat:
 
     def calls_for(self, schema: type) -> int:
         return sum(1 for called, _ in self.calls if called is schema)
+
+
+class FakeTool:
+    def __init__(self, name: str, failures: list[Exception] | None = None) -> None:
+        self.name = name
+        self.failures = failures or []
+        self.invocations: list[dict[str, Any]] = []
+
+    def invoke(self, arguments: dict[str, Any]) -> dict[str, Any]:
+        self.invocations.append(arguments)
+        if self.failures:
+            raise self.failures.pop(0)
+        return {"id": len(self.invocations), "workflow": self.name, **arguments}
+
+
+def fake_tools(names: list[str], failures: dict[str, list[Exception]] | None = None) -> dict[str, FakeTool]:
+    failures = failures or {}
+    return {name: FakeTool(name, failures.get(name)) for name in names}
