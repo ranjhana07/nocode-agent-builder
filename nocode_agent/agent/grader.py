@@ -44,6 +44,8 @@ def decide(grades: list[ChunkGrade], attempts: int, max_attempts: int, threshold
     relevant = [grade.index for grade in grades if grade.score >= threshold]
     if len(relevant) >= min_relevant:
         return Decision("proceed", relevant)
+    if attempts >= max_attempts:
+        return Decision("proceed" if relevant else "give_up", relevant)
     if not relevant:
         return Decision("rewrite", relevant)
     return Decision("retrieve_again", relevant)
