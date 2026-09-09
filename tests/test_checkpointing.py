@@ -3,12 +3,11 @@ from __future__ import annotations
 from nocode_agent.agent.graph import build_graph, make_checkpointer
 from nocode_agent.agent.planner import IntentDecision
 from nocode_agent.agent.state import BuildPlan, PlanStep, ToolInvocation
-from tests.fakes import FakeChat
-from tests.graph_helpers import make_deps
+from tests.graph_helpers import chat, make_deps
 
 
 def test_state_is_persisted_per_thread(tmp_path) -> None:
-    llm = FakeChat(
+    llm = chat(
         {
             IntentDecision: IntentDecision(kind="build"),
             BuildPlan: BuildPlan(summary="s", steps=[PlanStep(workflow="create_app", intent="create Orders", bind_as="app")]),
