@@ -45,6 +45,37 @@ def search(
         typer.echo(f"{rank}. [{hit.score:.3f}] {hit.chunk.id}  ({hit.chunk.metadata['section']})")
 
 
+@app.command()
+def ask(question: str, thread: str | None = typer.Option(None, "--thread")) -> None:
+    from nocode_agent.agent.runtime import build_runtime
+
+    state = build_runtime().run(question, thread, intent="question")
+    typer.echo(state["answer"])
+    sources = sorted({document["metadata"].get("source", "") for document in state.get("documents", [])})
+    if sources:
+        typer.echo("sources: " + ", ".join(sources))
+
+
+@app.command()
+def run(
+    request: str,
+    thread: str | None = typer.Option(None, "--thread"),
+    quiet: bool = typer.Option(False, "--quiet", help="Only print the final summary"),
+) -> None:
+    from nocode_agent.agent.runtime import build_runtime
+
+    final: dict = {}
+    for event in build_runtime().stream(request, thread, intent="build"):
+        if event["node"] == "__end__":
+            final = event["state"]
+        elif not quiet:
+            for line in event["trace"]:
+                typer.echo(f"  {event['node']}: {line}")
+    typer.echo(final.get("answer", ""))
+    if final.get("status") == "failed":
+        raise typer.Exit(code=1)
+
+
 eval_app = typer.Typer(help="Run evaluations", no_args_is_help=True)
 app.add_typer(eval_app, name="eval")
 
