@@ -39,6 +39,9 @@ def prepare_question_node(state: AgentState) -> dict[str, Any]:
 
 def answer_node(deps: AgentDeps):
     def answer(state: AgentState) -> dict[str, Any]:
+        if not state.get("documents"):
+            message = "I could not find documentation that answers this question."
+            return {"answer": message, "status": "unanswered", "trace": ["no usable context, declined to answer"]}
         context = executor.format_documents(state.get("documents", []))
         reply = text_call(deps.llm, ANSWER_SYSTEM, f"Question: {state['request']}\n\nDocumentation:\n{context}")
         return {"answer": reply, "status": "answered", "trace": ["answered question"]}

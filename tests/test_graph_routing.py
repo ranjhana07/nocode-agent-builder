@@ -144,3 +144,20 @@ def test_route_after_check() -> None:
     assert router.route_after_check({"validation_errors": []}, 2) == "execute"
     assert router.route_after_check({"validation_errors": ["x"], "repair_attempts": 1}, 2) == "generate_call"
     assert router.route_after_check({"validation_errors": ["x"], "repair_attempts": 2}, 2) == "finalize"
+
+
+def test_question_without_usable_context_is_not_answered_by_guessing() -> None:
+    from nocode_agent.agent.grader import ChunkGrade, GradeReport
+    from nocode_agent.agent.crag import RewrittenQuery
+
+    def nothing_relevant(messages):
+        return GradeReport(grades=[ChunkGrade(index=index, score=0.0) for index in range(10)])
+
+    llm = chat(
+        {GradeReport: nothing_relevant, RewrittenQuery: RewrittenQuery(query="try again")},
+        text="a made up answer",
+    )
+    state = run(build_graph(make_deps(llm)), "what is the airspeed of a swallow", intent="question")
+    assert state["status"] == "unanswered"
+    assert "could not find" in state["answer"]
+    assert state["retrieval_attempts"] == 3
