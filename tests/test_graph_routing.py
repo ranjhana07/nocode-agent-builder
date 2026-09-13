@@ -7,8 +7,8 @@ from nocode_agent.agent.graph import build_graph
 from nocode_agent.agent.planner import IntentDecision
 from nocode_agent.agent.state import BuildPlan, PlanStep, ToolInvocation
 from nocode_agent.agent.tools import PlatformError
-from tests.fakes import FakeChat, fake_tools
-from tests.graph_helpers import OPERATIONS, make_deps
+from tests.fakes import fake_tools
+from tests.graph_helpers import OPERATIONS, chat, make_deps
 
 
 def plan(*steps: tuple[str, str, str]) -> BuildPlan:
@@ -27,7 +27,7 @@ def run(graph, request: str = "build me a thing", **extra):
 
 
 def test_build_request_runs_every_step_in_order() -> None:
-    llm = FakeChat(
+    llm = chat(
         {
             IntentDecision: IntentDecision(kind="build"),
             BuildPlan: plan(("create_app", "create Orders", "app"), ("create_page", "add a home page", "page")),
@@ -46,7 +46,7 @@ def test_build_request_runs_every_step_in_order() -> None:
 
 
 def test_question_intent_skips_the_planner() -> None:
-    llm = FakeChat({IntentDecision: IntentDecision(kind="question")}, text="Use create_app.")
+    llm = chat({IntentDecision: IntentDecision(kind="question")}, text="Use create_app.")
     state = run(build_graph(make_deps(llm)), "how do I create an app?")
     assert state["status"] == "answered"
     assert state["answer"] == "Use create_app."
@@ -54,21 +54,21 @@ def test_question_intent_skips_the_planner() -> None:
 
 
 def test_preset_intent_skips_classification() -> None:
-    llm = FakeChat({}, text="answer")
+    llm = chat({}, text="answer")
     state = run(build_graph(make_deps(llm)), "q", intent="question")
     assert state["answer"] == "answer"
     assert llm.calls_for(IntentDecision) == 0
 
 
 def test_empty_plan_goes_straight_to_finalize() -> None:
-    llm = FakeChat({IntentDecision: IntentDecision(kind="build"), BuildPlan: plan()})
+    llm = chat({IntentDecision: IntentDecision(kind="build"), BuildPlan: plan()})
     state = run(build_graph(make_deps(llm)))
     assert state["status"] == "completed"
     assert state.get("results", []) == []
 
 
 def test_invalid_arguments_are_repaired_once() -> None:
-    llm = FakeChat(
+    llm = chat(
         {
             IntentDecision: IntentDecision(kind="build"),
             BuildPlan: plan(("create_app", "create Orders", "app")),
@@ -83,7 +83,7 @@ def test_invalid_arguments_are_repaired_once() -> None:
 
 
 def test_repair_budget_is_capped() -> None:
-    llm = FakeChat(
+    llm = chat(
         {
             IntentDecision: IntentDecision(kind="build"),
             BuildPlan: plan(("create_app", "create Orders", "app")),
@@ -97,7 +97,7 @@ def test_repair_budget_is_capped() -> None:
 
 
 def test_wrong_workflow_is_rejected_by_the_validator() -> None:
-    llm = FakeChat(
+    llm = chat(
         {
             IntentDecision: IntentDecision(kind="build"),
             BuildPlan: plan(("create_app", "create Orders", "app")),
@@ -111,7 +111,7 @@ def test_wrong_workflow_is_rejected_by_the_validator() -> None:
 
 
 def test_platform_rejection_triggers_a_repair_loop() -> None:
-    llm = FakeChat(
+    llm = chat(
         {
             IntentDecision: IntentDecision(kind="build"),
             BuildPlan: plan(("create_app", "create Orders", "app")),
@@ -128,7 +128,7 @@ def test_platform_rejection_triggers_a_repair_loop() -> None:
     "state, expected",
     [
         ({"intent": "build"}, "planner"),
-        ({"intent": "question"}, "retrieve_question"),
+        ({"intent": "question"}, "prepare_question"),
     ],
 )
 def test_route_intent(state, expected) -> None:
@@ -144,3 +144,20 @@ def test_route_after_check() -> None:
     assert router.route_after_check({"validation_errors": []}, 2) == "execute"
     assert router.route_after_check({"validation_errors": ["x"], "repair_attempts": 1}, 2) == "generate_call"
     assert router.route_after_check({"validation_errors": ["x"], "repair_attempts": 2}, 2) == "finalize"
+
+
+def test_question_without_usable_context_is_not_answered_by_guessing() -> None:
+    from nocode_agent.agent.grader import ChunkGrade, GradeReport
+    from nocode_agent.agent.crag import RewrittenQuery
+
+    def nothing_relevant(messages):
+        return GradeReport(grades=[ChunkGrade(index=index, score=0.0) for index in range(10)])
+
+    llm = chat(
+        {GradeReport: nothing_relevant, RewrittenQuery: RewrittenQuery(query="try again")},
+        text="a made up answer",
+    )
+    state = run(build_graph(make_deps(llm)), "what is the airspeed of a swallow", intent="question")
+    assert state["status"] == "unanswered"
+    assert "could not find" in state["answer"]
+    assert state["retrieval_attempts"] == 3

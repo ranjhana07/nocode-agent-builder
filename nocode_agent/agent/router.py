@@ -4,7 +4,7 @@ from nocode_agent.agent.state import AgentState
 
 
 def route_intent(state: AgentState) -> str:
-    return "planner" if state.get("intent") == "build" else "retrieve_question"
+    return "planner" if state.get("intent") == "build" else "prepare_question"
 
 
 def route_after_plan(state: AgentState) -> str:

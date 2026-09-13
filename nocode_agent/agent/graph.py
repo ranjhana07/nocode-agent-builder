@@ -9,6 +9,7 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, START, StateGraph
 
 from nocode_agent.agent import executor, router
+from nocode_agent.agent.crag import build_crag_graph
 from nocode_agent.agent.deps import AgentDeps
 from nocode_agent.agent.planner import classify_node, planner_node
 from nocode_agent.agent.state import AgentState
@@ -25,19 +26,22 @@ def make_checkpointer(path: Path) -> SqliteSaver:
     return SqliteSaver(connection)
 
 
-def retrieve_node(deps: AgentDeps):
-    def retrieve(state: AgentState) -> dict[str, Any]:
-        query = state.get("query") or state["request"]
-        hits = deps.spec_retriever(query, deps.settings.retrieval_top_k, False)
-        hits += deps.docs_retriever(query, deps.settings.retrieval_top_k, False)
-        documents = [hit.chunk.to_dict() for hit in hits]
-        return {"query": query, "documents": documents, "trace": [f"retrieved {len(documents)} chunks"]}
-
-    return retrieve
+def prepare_question_node(state: AgentState) -> dict[str, Any]:
+    return {
+        "query": state["request"],
+        "original_query": state["request"],
+        "documents": [],
+        "retrieval_attempts": 0,
+        "widen_search": False,
+        "grade_decision": "",
+    }
 
 
 def answer_node(deps: AgentDeps):
     def answer(state: AgentState) -> dict[str, Any]:
+        if not state.get("documents"):
+            message = "I could not find documentation that answers this question."
+            return {"answer": message, "status": "unanswered", "trace": ["no usable context, declined to answer"]}
         context = executor.format_documents(state.get("documents", []))
         reply = text_call(deps.llm, ANSWER_SYSTEM, f"Question: {state['request']}\n\nDocumentation:\n{context}")
         return {"answer": reply, "status": "answered", "trace": ["answered question"]}
@@ -51,8 +55,8 @@ def build_graph(deps: AgentDeps, checkpointer: Any | None = None):
     graph.add_node("classify", classify_node(deps))
     graph.add_node("planner", planner_node(deps))
     graph.add_node("prepare_step", executor.prepare_step_node)
-    graph.add_node("retrieve", retrieve_node(deps))
-    graph.add_node("retrieve_question", retrieve_node(deps))
+    graph.add_node("prepare_question", prepare_question_node)
+    graph.add_node("crag", build_crag_graph(deps))
     graph.add_node("generate_call", executor.generate_call_node(deps))
     graph.add_node("validate", executor.validate_node(deps))
     graph.add_node("execute", executor.execute_node(deps))
@@ -61,11 +65,11 @@ def build_graph(deps: AgentDeps, checkpointer: Any | None = None):
     graph.add_node("finalize", executor.finalize_node)
 
     graph.add_edge(START, "classify")
-    graph.add_conditional_edges("classify", router.route_intent, ["planner", "retrieve_question"])
+    graph.add_conditional_edges("classify", router.route_intent, ["planner", "prepare_question"])
     graph.add_conditional_edges("planner", router.route_after_plan, ["prepare_step", "finalize"])
-    graph.add_edge("prepare_step", "retrieve")
-    graph.add_edge("retrieve", "generate_call")
-    graph.add_edge("retrieve_question", "answer")
+    graph.add_edge("prepare_step", "crag")
+    graph.add_edge("prepare_question", "crag")
+    graph.add_conditional_edges("crag", router.route_after_retrieval, ["generate_call", "answer"])
     graph.add_edge("generate_call", "validate")
     graph.add_conditional_edges(
         "validate", partial(router.route_after_check, max_repairs=max_repairs), ["execute", "generate_call", "finalize"]
