@@ -76,6 +76,29 @@ def run(
         raise typer.Exit(code=1)
 
 
+@app.command()
+def serve(host: str = "0.0.0.0", port: int = 8000) -> None:
+    import uvicorn
+
+    uvicorn.run("nocode_agent.api.app:build_app", host=host, port=port, factory=True)
+
+
+@app.command("platform")
+def run_platform(host: str = "0.0.0.0", port: int = 9000) -> None:
+    import uvicorn
+
+    uvicorn.run("mockplatform.main:build_default_app", host=host, port=port, factory=True)
+
+
+@app.command()
+def dataset() -> None:
+    from nocode_agent.evals.dataset import generate_datasets
+
+    settings = get_settings()
+    questions, queries = generate_datasets(settings.docs_dir, settings.eval_dataset_path, settings.retrieval_queries_path)
+    typer.echo(f"wrote {questions} questions and {queries} retrieval queries")
+
+
 eval_app = typer.Typer(help="Run evaluations", no_args_is_help=True)
 app.add_typer(eval_app, name="eval")
 
