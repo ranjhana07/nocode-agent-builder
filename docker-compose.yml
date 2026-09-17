@@ -1,0 +1,45 @@
+services:
+  platform:
+    build: .
+    command: ["builder", "platform", "--port", "9000"]
+    environment:
+      PLATFORM_DB_URL: sqlite:////data/platform.db
+    volumes:
+      - platform-data:/data
+    ports:
+      - "9000:9000"
+
+  chroma:
+    image: chromadb/chroma:latest
+    environment:
+      IS_PERSISTENT: "TRUE"
+      ANONYMIZED_TELEMETRY: "FALSE"
+    volumes:
+      - chroma-data:/chroma/chroma
+    ports:
+      - "8001:8000"
+
+  agent:
+    build: .
+    env_file:
+      - .env
+    environment:
+      PLATFORM_URL: http://platform:9000
+      CHROMA_HOST: chroma
+      CHROMA_PORT: "8000"
+      CHECKPOINT_DB: /data/checkpoints.db
+      HF_HOME: /models
+    volumes:
+      - agent-data:/data
+      - model-cache:/models
+    ports:
+      - "8000:8000"
+    depends_on:
+      - platform
+      - chroma
+
+volumes:
+  platform-data:
+  chroma-data:
+  agent-data:
+  model-cache:
