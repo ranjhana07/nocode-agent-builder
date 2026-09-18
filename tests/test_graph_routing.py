@@ -5,7 +5,7 @@ import pytest
 from nocode_agent.agent import router
 from nocode_agent.agent.graph import build_graph
 from nocode_agent.agent.planner import IntentDecision
-from nocode_agent.agent.state import BuildPlan, PlanStep, ToolInvocation
+from nocode_agent.agent.state import BuildPlan, PlanStep, QuestionAnswer, ToolInvocation
 from nocode_agent.agent.tools import PlatformError
 from tests.fakes import fake_tools
 from tests.graph_helpers import OPERATIONS, chat, make_deps
@@ -46,15 +46,17 @@ def test_build_request_runs_every_step_in_order() -> None:
 
 
 def test_question_intent_skips_the_planner() -> None:
-    llm = chat({IntentDecision: IntentDecision(kind="question")}, text="Use create_app.")
+    reply = QuestionAnswer(answer="Use create_app.", workflow="create_app")
+    llm = chat({IntentDecision: IntentDecision(kind="question"), QuestionAnswer: reply})
     state = run(build_graph(make_deps(llm)), "how do I create an app?")
     assert state["status"] == "answered"
     assert state["answer"] == "Use create_app."
+    assert state["selected_workflow"] == "create_app"
     assert llm.calls_for(BuildPlan) == 0
 
 
 def test_preset_intent_skips_classification() -> None:
-    llm = chat({}, text="answer")
+    llm = chat({QuestionAnswer: QuestionAnswer(answer="answer")})
     state = run(build_graph(make_deps(llm)), "q", intent="question")
     assert state["answer"] == "answer"
     assert llm.calls_for(IntentDecision) == 0
