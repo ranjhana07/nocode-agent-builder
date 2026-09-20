@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     chroma_collection: str = "nocode_docs"
 
     platform_url: str = "http://localhost:9000"
+    platform_api_key: str | None = None
+    platform_max_retries: int = Field(default=3, ge=0)
     checkpoint_db: Path = Path("checkpoints.db")
 
     retrieval_top_k: int = Field(default=5, ge=1)
