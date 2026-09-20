@@ -12,8 +12,8 @@ from nocode_agent.agent import executor, router
 from nocode_agent.agent.crag import build_crag_graph
 from nocode_agent.agent.deps import AgentDeps
 from nocode_agent.agent.planner import classify_node, planner_node
-from nocode_agent.agent.state import AgentState
-from nocode_agent.llm import text_call
+from nocode_agent.agent.state import AgentState, QuestionAnswer
+from nocode_agent.llm import structured_call
 
 ANSWER_SYSTEM = (
     "Answer the question using only the documentation excerpts. Name the workflow involved when there is one. "
@@ -43,8 +43,14 @@ def answer_node(deps: AgentDeps):
             message = "I could not find documentation that answers this question."
             return {"answer": message, "status": "unanswered", "trace": ["no usable context, declined to answer"]}
         context = executor.format_documents(state.get("documents", []))
-        reply = text_call(deps.llm, ANSWER_SYSTEM, f"Question: {state['request']}\n\nDocumentation:\n{context}")
-        return {"answer": reply, "status": "answered", "trace": ["answered question"]}
+        prompt = f"Question: {state['request']}\n\nDocumentation:\n{context}"
+        reply = structured_call(deps.llm, QuestionAnswer, ANSWER_SYSTEM, prompt)
+        return {
+            "answer": reply.answer,
+            "selected_workflow": reply.workflow or "",
+            "status": "answered",
+            "trace": ["answered question"],
+        }
 
     return answer
 

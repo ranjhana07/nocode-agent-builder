@@ -39,6 +39,13 @@ class ToolInvocation(BaseModel):
     arguments: dict[str, Any] = Field(default_factory=dict)
 
 
+class QuestionAnswer(BaseModel):
+    answer: str = Field(description="Answer grounded in the documentation excerpts")
+    workflow: WorkflowName | None = Field(
+        default=None, description="The platform workflow the question is about, if there is exactly one"
+    )
+
+
 class AgentState(TypedDict, total=False):
     request: str
     intent: Literal["build", "question"]

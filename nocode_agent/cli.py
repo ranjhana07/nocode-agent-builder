@@ -121,5 +121,31 @@ def eval_retrieval(
     typer.echo(format_table(results))
 
 
+@eval_app.command("agent")
+def eval_agent(
+    limit: int | None = typer.Option(None, "--limit"),
+    local: bool = typer.Option(False, "--local", help="Score locally instead of through LangSmith"),
+    results_dir: Path = typer.Option(Path("results"), "--results-dir"),
+    experiment: str = typer.Option("corrective-rag", "--experiment"),
+) -> None:
+    from nocode_agent.agent.runtime import build_runtime
+    from nocode_agent.evals.agent_target import make_target
+    from nocode_agent.evals.langsmith_eval import run_langsmith_eval
+    from nocode_agent.evals.local_eval import run_local_eval, write_summary
+    from nocode_agent.llm import build_chat_model
+
+    settings = get_settings()
+    runtime = build_runtime(settings)
+    judge = build_chat_model(settings)
+    target = make_target(runtime)
+    if local:
+        summary = run_local_eval(target, judge, settings.eval_dataset_path, limit)
+        write_summary(summary, results_dir / "agent_eval.json")
+        for metric, value in summary["metrics"].items():
+            typer.echo(f"{metric}: {value:.3f}")
+        return
+    run_langsmith_eval(target, judge, settings.eval_dataset_path, settings.langsmith_dataset, experiment, limit)
+
+
 if __name__ == "__main__":
     app()
