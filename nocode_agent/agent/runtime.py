@@ -53,7 +53,9 @@ def build_runtime(
     llm = llm or build_chat_model(settings)
     stack = rag_stack or build_rag_stack(settings, llm=llm)
     operations = load_operations(settings.openapi_path)
-    client = platform_client or PlatformClient(settings.platform_url)
+    client = platform_client or PlatformClient(
+        settings.platform_url, api_key=settings.platform_api_key, max_retries=settings.platform_max_retries
+    )
     workflows = known_workflows_from(stack.index.all_chunks())
     deps = AgentDeps(
         llm=llm,

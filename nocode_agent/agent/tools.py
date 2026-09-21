@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from collections.abc import Callable
 from typing import Any
 
@@ -16,16 +17,39 @@ class PlatformError(Exception):
         self.detail = detail
 
 
+RETRYABLE = {429, 500, 502, 503, 504}
+
+
 class PlatformClient:
-    def __init__(self, base_url: str, client: httpx.Client | None = None, timeout: float = 15.0) -> None:
-        self.client = client or httpx.Client(base_url=base_url, timeout=timeout)
+    def __init__(
+        self,
+        base_url: str,
+        client: httpx.Client | None = None,
+        timeout: float = 15.0,
+        api_key: str | None = None,
+        max_retries: int = 3,
+        sleep: Callable[[float], None] = time.sleep,
+    ) -> None:
+        headers = {"x-api-key": api_key} if api_key else {}
+        self.client = client or httpx.Client(base_url=base_url, timeout=timeout, headers=headers)
+        self.max_retries = max_retries
+        self.sleep = sleep
+
+    def send(self, method: str, path: str, body: dict[str, Any] | None) -> httpx.Response:
+        for attempt in range(self.max_retries + 1):
+            response = self.client.request(method, path, json=body)
+            if response.status_code not in RETRYABLE or attempt == self.max_retries:
+                return response
+            delay = response.headers.get("retry-after")
+            self.sleep(float(delay) if delay and delay.isdigit() else 0.5 * 2**attempt)
+        return response
 
     def call(self, operation: Operation, arguments: dict[str, Any]) -> dict[str, Any]:
         path = operation.path
         body = dict(arguments)
         for name in operation.path_params:
             path = path.replace("{" + name + "}", str(body.pop(name)))
-        response = self.client.request(operation.method, path, json=body or None)
+        response = self.send(operation.method, path, body or None)
         if response.is_error:
             try:
                 detail = response.json().get("detail", response.text)
