@@ -33,9 +33,14 @@ class Settings(BaseSettings):
     platform_max_retries: int = Field(default=3, ge=0)
     checkpoint_db: Path = Path("checkpoints.db")
 
+    chunk_max_chars: int = Field(default=900, ge=200)
+    chunk_overlap_chars: int = Field(default=120, ge=0)
+
     retrieval_top_k: int = Field(default=5, ge=1)
     retrieval_fetch_k: int = Field(default=20, ge=1)
     rrf_k: int = Field(default=60, ge=1)
+    dense_weight: float = Field(default=1.0, ge=0)
+    sparse_weight: float = Field(default=1.0, ge=0)
     multi_query_count: int = Field(default=3, ge=1)
 
     grader_relevance_threshold: float = Field(default=0.5, ge=0, le=1)

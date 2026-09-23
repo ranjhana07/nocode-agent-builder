@@ -8,7 +8,7 @@ from nocode_agent.config import get_settings
 from nocode_agent.evals.retrieval_runner import run_retrieval_eval
 from nocode_agent.rag.eval import format_table
 from nocode_agent.rag.filters import MetadataFilter
-from nocode_agent.rag.ingest import ingest_corpus
+from nocode_agent.rag.ingest import ingest_corpus, splitter_config
 from nocode_agent.rag.service import build_index, build_rag_stack
 
 app = typer.Typer(help="Build apps on the Nocode platform from plain English", no_args_is_help=True)
@@ -21,7 +21,7 @@ def ingest(
 ) -> None:
     settings = get_settings()
     index = build_index(settings, persistent=not in_memory)
-    count = ingest_corpus(index, settings.docs_dir, settings.openapi_path, reset=reset)
+    count = ingest_corpus(index, settings.docs_dir, settings.openapi_path, reset=reset, config=splitter_config(settings))
     typer.echo(f"ingested {count} chunks into {settings.chroma_collection}")
 
 

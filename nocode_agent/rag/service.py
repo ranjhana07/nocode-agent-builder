@@ -7,7 +7,7 @@ from langchain_core.language_models import BaseChatModel
 from nocode_agent.config import Settings, get_settings
 from nocode_agent.embeddings import build_embeddings
 from nocode_agent.rag.bm25 import BM25Index
-from nocode_agent.rag.ingest import load_corpus
+from nocode_agent.rag.ingest import load_corpus, splitter_config
 from nocode_agent.rag.rerank import build_reranker
 from nocode_agent.rag.retriever import HybridRetriever
 from nocode_agent.rag.vector_store import ChromaVectorIndex, InMemoryVectorIndex, VectorIndex
@@ -34,7 +34,7 @@ def build_rag_stack(
     settings = settings or get_settings()
     index = build_index(settings, persistent)
     if index.count() == 0:
-        index.add(load_corpus(settings.docs_dir, settings.openapi_path))
+        index.add(load_corpus(settings.docs_dir, settings.openapi_path, splitter_config(settings)))
     retriever = HybridRetriever(
         index,
         BM25Index(index.all_chunks()),

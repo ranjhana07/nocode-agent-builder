@@ -32,6 +32,10 @@ def load_corpus(docs_dir: Path, openapi_path: Path, config: SplitterConfig | Non
     return load_markdown_chunks(docs_dir, config) + load_openapi_chunks(openapi_path, docs_dir)
 
 
+def splitter_config(settings) -> SplitterConfig:
+    return SplitterConfig(settings.chunk_max_chars, settings.chunk_overlap_chars)
+
+
 def ingest_corpus(
     index: VectorIndex, docs_dir: Path, openapi_path: Path, reset: bool = False, config: SplitterConfig | None = None
 ) -> int:
