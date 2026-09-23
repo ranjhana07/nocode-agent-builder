@@ -43,5 +43,7 @@ def build_rag_stack(
         rrf_k=settings.rrf_k,
         fetch_k=settings.retrieval_fetch_k,
         multi_query_count=settings.multi_query_count,
+        dense_weight=settings.dense_weight,
+        sparse_weight=settings.sparse_weight,
     )
     return RagStack(index=index, retriever=retriever)
