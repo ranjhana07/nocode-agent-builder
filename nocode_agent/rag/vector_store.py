@@ -15,6 +15,8 @@ class VectorIndex(Protocol):
 
     def search(self, query: str, k: int, metadata_filter: MetadataFilter | None = None) -> list[ScoredChunk]: ...
 
+    def delete(self, ids: list[str]) -> None: ...
+
     def all_chunks(self) -> list[Chunk]: ...
 
     def count(self) -> int: ...
@@ -50,6 +52,12 @@ class InMemoryVectorIndex:
             if len(results) == k:
                 break
         return results
+
+    def delete(self, ids: list[str]) -> None:
+        doomed = set(ids)
+        keep = [position for position, chunk in enumerate(self.chunks) if chunk.id not in doomed]
+        self.chunks = [self.chunks[position] for position in keep]
+        self.matrix = self.matrix[keep] if keep else np.zeros((0, 0), dtype=np.float32)
 
     def all_chunks(self) -> list[Chunk]:
         return list(self.chunks)
@@ -103,6 +111,10 @@ class ChromaVectorIndex:
                 continue
             results.append(ScoredChunk(chunk, 1.0 - float(distance)))
         return results
+
+    def delete(self, ids: list[str]) -> None:
+        if ids:
+            self.collection.delete(ids=ids)
 
     def all_chunks(self) -> list[Chunk]:
         payload = self.collection.get()
