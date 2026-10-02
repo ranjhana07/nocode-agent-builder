@@ -8,7 +8,7 @@ from nocode_agent.config import get_settings
 from nocode_agent.evals.retrieval_runner import run_retrieval_eval
 from nocode_agent.rag.eval import format_table
 from nocode_agent.rag.filters import MetadataFilter
-from nocode_agent.rag.ingest import ingest_corpus, splitter_config
+from nocode_agent.rag.ingest import ingest_corpus, load_corpus, splitter_config, sync_corpus
 from nocode_agent.rag.service import build_index, build_rag_stack
 
 app = typer.Typer(help="Build apps on the Nocode platform from plain English", no_args_is_help=True)
@@ -18,9 +18,17 @@ app = typer.Typer(help="Build apps on the Nocode platform from plain English", n
 def ingest(
     reset: bool = typer.Option(False, "--reset", help="Drop the collection before ingesting"),
     in_memory: bool = typer.Option(False, "--in-memory", help="Use a throwaway in-memory index"),
+    sync: bool = typer.Option(False, "--sync", help="Only embed new or changed chunks and drop stale ones"),
 ) -> None:
     settings = get_settings()
     index = build_index(settings, persistent=not in_memory)
+    if sync:
+        chunks = load_corpus(settings.docs_dir, settings.openapi_path, splitter_config(settings))
+        report = sync_corpus(index, chunks)
+        typer.echo(
+            f"added {report.added}, updated {report.updated}, removed {report.removed}, unchanged {report.unchanged}"
+        )
+        return
     count = ingest_corpus(index, settings.docs_dir, settings.openapi_path, reset=reset, config=splitter_config(settings))
     typer.echo(f"ingested {count} chunks into {settings.chroma_collection}")
 
