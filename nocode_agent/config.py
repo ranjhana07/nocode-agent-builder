@@ -16,6 +16,7 @@ class Settings(BaseSettings):
 
     embedding_backend: str = "sentence-transformers"
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    embedding_cache_path: Path | None = None
     rerank_backend: str = "cross-encoder"
     rerank_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
