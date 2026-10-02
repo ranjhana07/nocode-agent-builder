@@ -13,8 +13,17 @@ SearchFn = Callable[[str], list[ScoredChunk]]
 
 
 @dataclass
+class QueryOutcome:
+    query_id: str
+    query: str
+    rank: int | None
+    seconds: float
+
+
+@dataclass
 class RetrievalMetrics:
     system: str
+    group: str
     queries: int
     hit_at_1: float
     hit_at_3: float
@@ -31,35 +40,46 @@ def first_relevant_rank(hits: Sequence[ScoredChunk], expected_sources: Sequence[
     return None
 
 
-def evaluate_retrieval(system: str, search: SearchFn, queries: Sequence[dict], ks: Sequence[int] = (1, 3, 5)) -> RetrievalMetrics:
-    ranks: list[int | None] = []
-    started = time.perf_counter()
+def rank_queries(search: SearchFn, queries: Sequence[dict]) -> list[QueryOutcome]:
+    outcomes: list[QueryOutcome] = []
     for row in queries:
-        ranks.append(first_relevant_rank(search(row["query"]), row["expected_sources"]))
-    elapsed = time.perf_counter() - started
-    total = len(ranks) or 1
+        started = time.perf_counter()
+        hits = search(row["query"])
+        elapsed = time.perf_counter() - started
+        outcomes.append(
+            QueryOutcome(row.get("id", ""), row["query"], first_relevant_rank(hits, row["expected_sources"]), elapsed)
+        )
+    return outcomes
+
+
+def summarize(system: str, outcomes: Sequence[QueryOutcome], group: str = "all") -> RetrievalMetrics:
+    total = len(outcomes) or 1
 
     def hit_rate(k: int) -> float:
-        return sum(1 for rank in ranks if rank is not None and rank <= k) / total
+        return sum(1 for item in outcomes if item.rank is not None and item.rank <= k) / total
 
-    reciprocal = sum(1 / rank for rank in ranks if rank is not None) / total
     return RetrievalMetrics(
         system=system,
-        queries=len(ranks),
-        hit_at_1=hit_rate(ks[0]),
-        hit_at_3=hit_rate(ks[1]),
-        hit_at_5=hit_rate(ks[2]),
-        mrr=reciprocal,
-        seconds_per_query=elapsed / total,
+        group=group,
+        queries=len(outcomes),
+        hit_at_1=hit_rate(1),
+        hit_at_3=hit_rate(3),
+        hit_at_5=hit_rate(5),
+        mrr=sum(1 / item.rank for item in outcomes if item.rank is not None) / total,
+        seconds_per_query=sum(item.seconds for item in outcomes) / total,
     )
 
 
+def evaluate_retrieval(system: str, search: SearchFn, queries: Sequence[dict]) -> RetrievalMetrics:
+    return summarize(system, rank_queries(search, queries))
+
+
 def format_table(results: Sequence[RetrievalMetrics]) -> str:
-    header = f"{'system':<34}{'n':>5}{'hit@1':>8}{'hit@3':>8}{'hit@5':>8}{'mrr':>8}{'s/query':>9}"
+    header = f"{'system':<34}{'group':<10}{'n':>5}{'hit@1':>8}{'hit@3':>8}{'hit@5':>8}{'mrr':>8}{'s/query':>9}"
     lines = [header, "-" * len(header)]
     for item in results:
         lines.append(
-            f"{item.system:<34}{item.queries:>5}{item.hit_at_1:>8.3f}{item.hit_at_3:>8.3f}"
+            f"{item.system:<34}{item.group:<10}{item.queries:>5}{item.hit_at_1:>8.3f}{item.hit_at_3:>8.3f}"
             f"{item.hit_at_5:>8.3f}{item.mrr:>8.3f}{item.seconds_per_query:>9.3f}"
         )
     return "\n".join(lines)
