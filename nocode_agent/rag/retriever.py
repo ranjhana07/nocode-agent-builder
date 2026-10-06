@@ -29,6 +29,8 @@ class HybridRetriever:
         rrf_k: int = 60,
         fetch_k: int = 20,
         multi_query_count: int = 3,
+        dense_weight: float = 1.0,
+        sparse_weight: float = 1.0,
     ) -> None:
         self.vector_index = vector_index
         self.bm25_index = bm25_index
@@ -37,6 +39,8 @@ class HybridRetriever:
         self.rrf_k = rrf_k
         self.fetch_k = fetch_k
         self.multi_query_count = multi_query_count
+        self.dense_weight = dense_weight
+        self.sparse_weight = sparse_weight
 
     def vector_only(self, query: str, k: int, metadata_filter: MetadataFilter | None = None) -> RetrievalResult:
         hits = self.vector_index.search(query, k, metadata_filter)
@@ -54,10 +58,12 @@ class HybridRetriever:
         if multi_query and self.llm is not None:
             queries = expand_query(self.llm, query, self.multi_query_count)
         rankings: list[list[ScoredChunk]] = []
+        weights: list[float] = []
         for variant in queries:
             rankings.append(self.vector_index.search(variant, self.fetch_k, metadata_filter))
             rankings.append(self.bm25_index.search(variant, self.fetch_k, metadata_filter))
-        fused = reciprocal_rank_fusion(rankings, k=self.rrf_k)
+            weights.extend([self.dense_weight, self.sparse_weight])
+        fused = reciprocal_rank_fusion(rankings, k=self.rrf_k, weights=weights)
         if rerank and self.reranker is not None:
             return RetrievalResult(self.reranker.rerank(query, fused[: self.fetch_k], k), queries)
         return RetrievalResult(fused[:k], queries)

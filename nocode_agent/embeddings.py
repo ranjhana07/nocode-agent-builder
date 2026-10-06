@@ -59,7 +59,13 @@ class EmbeddingFactory(Protocol):
 def build_embeddings(settings: Settings | None = None) -> Embeddings:
     settings = settings or get_settings()
     if settings.embedding_backend == "hashing":
-        return HashingEmbeddings()
-    if settings.embedding_backend == "sentence-transformers":
-        return SentenceTransformerEmbeddings(settings.embedding_model)
-    raise ValueError(f"unknown embedding backend {settings.embedding_backend!r}")
+        embeddings: Embeddings = HashingEmbeddings()
+    elif settings.embedding_backend == "sentence-transformers":
+        embeddings = SentenceTransformerEmbeddings(settings.embedding_model)
+    else:
+        raise ValueError(f"unknown embedding backend {settings.embedding_backend!r}")
+    if settings.embedding_cache_path:
+        from nocode_agent.embedding_cache import CachedEmbeddings
+
+        return CachedEmbeddings(embeddings, settings.embedding_cache_path, settings.embedding_model)
+    return embeddings

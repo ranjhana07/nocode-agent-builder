@@ -55,3 +55,18 @@ def test_rerank_reorders_the_fused_list() -> None:
 def test_metadata_filter_is_respected() -> None:
     result = build().hybrid("forms", 5, MetadataFilter(doc_types=("guide",)), multi_query=False, rerank=False)
     assert {hit.chunk.id for hit in result.hits} == {"guide"}
+
+
+def test_fusion_weights_can_favour_one_retriever() -> None:
+    chunks = [
+        Chunk("lexical", "publish_site publish site production", {"doc_type": "api_spec", "workflow": "publish_site"}),
+        Chunk("other", "nothing related here at all", {"doc_type": "guide", "workflow": "none"}),
+    ]
+    vectors = InMemoryVectorIndex(HashingEmbeddings())
+    vectors.add(chunks)
+    sparse_heavy = HybridRetriever(vectors, BM25Index(chunks), fetch_k=2, dense_weight=0.0, sparse_weight=1.0)
+    result = sparse_heavy.hybrid("publish site production", 2, multi_query=False, rerank=False)
+    assert result.hits[0].chunk.id == "lexical"
+    dense_only = HybridRetriever(vectors, BM25Index(chunks), fetch_k=2, dense_weight=1.0, sparse_weight=0.0)
+    dense_ids = [hit.chunk.id for hit in dense_only.hybrid("publish site production", 2, multi_query=False, rerank=False).hits]
+    assert dense_ids == [hit.chunk.id for hit in vectors.search("publish site production", 2)]

@@ -108,7 +108,7 @@ QUOTAS = {
     "allowed_values": 10,
     "default_value": 12,
     "error_status": 24,
-    "quick_fact": 26,
+    "quick_fact": 30,
     "call_order": 4,
 }
 

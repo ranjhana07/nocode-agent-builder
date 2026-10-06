@@ -6,7 +6,7 @@ from pathlib import Path
 
 from nocode_agent.config import Settings
 from nocode_agent.evals.dataset import read_jsonl
-from nocode_agent.rag.eval import RetrievalMetrics, SearchFn, evaluate_retrieval, write_results
+from nocode_agent.rag.eval import RetrievalMetrics, SearchFn, rank_queries, summarize, write_results
 from nocode_agent.rag.retriever import HybridRetriever
 
 DEPTH = 5
@@ -15,12 +15,17 @@ DEPTH = 5
 def build_systems(retriever: HybridRetriever, include_multi_query: bool) -> dict[str, SearchFn]:
     systems: dict[str, SearchFn] = {
         "vector only (baseline)": lambda query: retriever.vector_only(query, DEPTH).hits,
+        "bm25 only": lambda query: retriever.bm25_index.search(query, DEPTH),
         "hybrid bm25 + vector (rrf)": lambda query: retriever.hybrid(query, DEPTH, multi_query=False, rerank=False).hits,
         "hybrid + rerank": lambda query: retriever.hybrid(query, DEPTH, multi_query=False, rerank=True).hits,
     }
     if include_multi_query:
         systems["hybrid + rerank + multi-query"] = lambda query: retriever.hybrid(query, DEPTH, multi_query=True, rerank=True).hits
     return systems
+
+
+def group_of(query_id: str) -> str:
+    return "intent" if query_id.startswith("i-") else "question"
 
 
 def run_retrieval_eval(
@@ -33,10 +38,14 @@ def run_retrieval_eval(
     queries = read_jsonl(settings.retrieval_queries_path)
     if limit:
         queries = queries[:limit]
-    results = [
-        evaluate_retrieval(name, search, queries)
-        for name, search in build_systems(retriever, include_multi_query).items()
-    ]
+    results: list[RetrievalMetrics] = []
+    for name, search in build_systems(retriever, include_multi_query).items():
+        outcomes = rank_queries(search, queries)
+        results.append(summarize(name, outcomes, "all"))
+        for group in ("question", "intent"):
+            subset = [item for item in outcomes if group_of(item.query_id) == group]
+            if subset:
+                results.append(summarize(name, subset, group))
     if results_dir:
         context = {
             "queries": len(queries),

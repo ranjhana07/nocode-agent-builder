@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from nocode_agent.rag.eval import evaluate_retrieval, first_relevant_rank, format_table
+from nocode_agent.rag.eval import evaluate_retrieval, first_relevant_rank, format_table, rank_queries, summarize
 from nocode_agent.rag.types import Chunk, ScoredChunk
 
 
@@ -37,3 +37,14 @@ def test_table_lists_every_system() -> None:
     table = format_table([metrics])
     assert "system-one" in table
     assert "1.000" in table
+
+
+def test_groups_are_summarised_from_the_same_outcomes() -> None:
+    answers = {"a": hits("a.md"), "b": hits("x.md"), "c": hits("a.md")}
+    queries = [{"id": name, "query": name, "expected_sources": ["a.md"]} for name in answers]
+    outcomes = rank_queries(lambda query: answers[query], queries)
+    first = summarize("fake", outcomes[:2], "first")
+    rest = summarize("fake", outcomes[2:], "rest")
+    assert (first.queries, first.hit_at_1) == (2, 0.5)
+    assert (rest.queries, rest.hit_at_1) == (1, 1.0)
+    assert first.group == "first"
