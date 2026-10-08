@@ -5,6 +5,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from nocode_agent.agent.deps import AgentDeps
+from nocode_agent.agent.plan_checker import check_plan
 from nocode_agent.agent.state import AgentState, BuildPlan
 from nocode_agent.llm import structured_call
 
@@ -41,14 +42,31 @@ def classify_node(deps: AgentDeps):
 
 def planner_node(deps: AgentDeps):
     def plan(state: AgentState) -> dict[str, Any]:
-        result = structured_call(deps.llm, BuildPlan, PLANNER_SYSTEM, state["request"])
+        prompt = state["request"]
+        trace: list[str] = []
+        for _ in range(deps.settings.max_replans + 1):
+            result = structured_call(deps.llm, BuildPlan, PLANNER_SYSTEM, prompt)
+            problems = check_plan(result.steps, deps.settings.max_plan_steps)
+            if not problems:
+                break
+            trace.append(f"plan rejected: {'; '.join(problems)}")
+            feedback = "; ".join(problems)
+            prompt = f"{state['request']}\n\nYour previous plan was rejected: {feedback}. Fix it."
+        else:
+            return {
+                "plan": [],
+                "plan_summary": result.summary,
+                "status": "failed",
+                "validation_errors": problems,
+                "trace": [*trace, "no valid plan after replanning"],
+            }
         steps = result.steps
         return {
             "plan": steps,
             "plan_summary": result.summary,
             "step_index": 0,
             "refs": {},
-            "trace": [f"planned {len(steps)} steps: " + ", ".join(step.workflow for step in steps)],
+            "trace": [*trace, f"planned {len(steps)} steps: " + ", ".join(step.workflow for step in steps)],
         }
 
     return plan

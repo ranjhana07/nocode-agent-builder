@@ -27,9 +27,9 @@ def check_plan(steps: list[PlanStep], max_steps: int = 60) -> list[str]:
             if needed not in seen:
                 problems.append(f"step {position} ({step.workflow}) needs {needed} to run earlier")
         seen.add(step.workflow)
-    publishes = [position for position, step in enumerate(steps, start=1) if step.workflow == "publish_site"]
-    if publishes and publishes[-1] != len(steps):
-        problems.append("publish_site must be the last step")
+    first_publish = next((position for position, step in enumerate(steps) if step.workflow == "publish_site"), None)
+    if first_publish is not None and any(step.workflow != "publish_site" for step in steps[first_publish:]):
+        problems.append("publish_site must come after every other step")
     aliases = [step.bind_as for step in steps if step.bind_as]
     duplicated = sorted({alias for alias in aliases if aliases.count(alias) > 1})
     if duplicated:
