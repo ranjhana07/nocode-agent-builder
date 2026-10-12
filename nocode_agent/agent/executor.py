@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 from nocode_agent.agent.deps import AgentDeps
+from nocode_agent.agent.references import resolve_references
 from nocode_agent.agent.state import AgentState, PlanStep, ToolInvocation
 from nocode_agent.agent.tools import PlatformError
 from nocode_agent.llm import structured_call
@@ -11,7 +12,8 @@ from nocode_agent.openapi import validate_arguments
 
 CALL_SYSTEM = """You turn one planned step into a single platform workflow call.
 Use only the documentation excerpts and the ids in the known objects. Never invent ids.
-Return the workflow name and its arguments, including path parameters such as app_id."""
+Return the workflow name and its arguments, including path parameters such as app_id.
+To use an id of a known object write a reference like $app.id instead of the number."""
 
 
 def current_step(state: AgentState) -> PlanStep:
@@ -72,6 +74,7 @@ def validate_node(deps: AgentDeps):
         call = state["pending_call"]
         step = current_step(state)
         errors: list[str] = []
+        call = {**call, "arguments": resolve_references(call["arguments"], state.get("refs", {}), errors)}
         if call["workflow"] != step.workflow:
             errors.append(f"the plan requires {step.workflow} but the call targets {call['workflow']}")
         operation = deps.operations.get(call["workflow"])
@@ -80,7 +83,7 @@ def validate_node(deps: AgentDeps):
         else:
             errors.extend(validate_arguments(operation, call["arguments"]))
         label = "arguments valid" if not errors else f"{len(errors)} validation errors"
-        return {"validation_errors": errors, "trace": [label]}
+        return {"pending_call": call, "validation_errors": errors, "trace": [label]}
 
     return validate
 
