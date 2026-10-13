@@ -92,6 +92,9 @@ def execute_node(deps: AgentDeps):
     def execute(state: AgentState) -> dict[str, Any]:
         call = state["pending_call"]
         step = current_step(state)
+        if state.get("dry_run"):
+            output = {"id": len(state.get("results", [])) + 1, "dry_run": True, **call["arguments"]}
+            return _record(state, step, call, output, "validated only (dry run)")
         try:
             output = deps.tools[call["workflow"]].invoke(call["arguments"])
         except PlatformError as error:
@@ -99,17 +102,20 @@ def execute_node(deps: AgentDeps):
                 "validation_errors": [f"platform rejected the call: {error.detail}"],
                 "trace": [f"{call['workflow']} failed with {error.status_code}"],
             }
-        alias = step.bind_as or step.workflow
-        refs = {**state.get("refs", {}), alias: output}
-        record = {"workflow": call["workflow"], "arguments": call["arguments"], "output": output}
-        return {
-            "refs": refs,
-            "results": [record],
-            "validation_errors": [],
-            "trace": [f"{call['workflow']} ok, saved as {alias}"],
-        }
+        return _record(state, step, call, output, "ok")
 
     return execute
+
+
+def _record(state: AgentState, step: PlanStep, call: dict[str, Any], output: dict[str, Any], note: str) -> dict[str, Any]:
+    alias = step.bind_as or step.workflow
+    record = {"workflow": call["workflow"], "arguments": call["arguments"], "output": output}
+    return {
+        "refs": {**state.get("refs", {}), alias: output},
+        "results": [record],
+        "validation_errors": [],
+        "trace": [f"{call['workflow']} {note}, saved as {alias}"],
+    }
 
 
 def advance_node(state: AgentState) -> dict[str, Any]:
