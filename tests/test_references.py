@@ -79,3 +79,29 @@ def test_bad_reference_goes_through_the_repair_loop() -> None:
     assert state["status"] == "completed"
     assert state["repair_attempts"] == 1
     assert tools["create_page"].invocations == [{"app_id": 1, "title": "Home", "slug": "home"}]
+
+
+def test_dry_run_validates_without_calling_tools_and_still_chains_ids() -> None:
+    plan = BuildPlan(
+        summary="s",
+        steps=[
+            PlanStep(workflow="create_app", intent="app", bind_as="app"),
+            PlanStep(workflow="create_page", intent="page", bind_as="page"),
+        ],
+    )
+    llm = chat(
+        {
+            IntentDecision: IntentDecision(kind="build"),
+            BuildPlan: plan,
+            ToolInvocation: [
+                ToolInvocation(workflow="create_app", arguments={"name": "Orders"}),
+                ToolInvocation(workflow="create_page", arguments={"app_id": "$app.id", "title": "Home", "slug": "home"}),
+            ],
+        }
+    )
+    tools = fake_tools(list(OPERATIONS))
+    state = build_graph(make_deps(llm, tools)).invoke({"request": "x", "dry_run": True})
+    assert state["status"] == "completed"
+    assert all(tool.invocations == [] for tool in tools.values())
+    assert state["results"][1]["arguments"]["app_id"] == 1
+    assert state["results"][0]["output"]["dry_run"] is True
