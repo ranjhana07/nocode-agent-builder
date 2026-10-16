@@ -35,6 +35,7 @@ class AgentRequest(BaseModel):
     thread_id: str | None = None
     intent: Literal["build", "question"] | None = None
     stream: bool = True
+    dry_run: bool = False
 
 
 class AgentResponse(BaseModel):

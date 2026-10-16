@@ -48,6 +48,8 @@ class Settings(BaseSettings):
     grader_min_relevant: int = Field(default=2, ge=1)
     max_retrieval_attempts: int = Field(default=3, ge=1)
     max_repair_attempts: int = Field(default=2, ge=0)
+    max_replans: int = Field(default=2, ge=0)
+    max_plan_steps: int = Field(default=60, ge=1)
 
     langsmith_dataset: str = "nocode-agent-eval"
     eval_dataset_path: Path = Path("data/eval/questions.jsonl")

@@ -48,6 +48,7 @@ class QuestionAnswer(BaseModel):
 
 class AgentState(TypedDict, total=False):
     request: str
+    dry_run: bool
     intent: Literal["build", "question"]
     plan: list[PlanStep]
     plan_summary: str

@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 from nocode_agent.agent.deps import AgentDeps
+from nocode_agent.agent.references import resolve_references
 from nocode_agent.agent.state import AgentState, PlanStep, ToolInvocation
 from nocode_agent.agent.tools import PlatformError
 from nocode_agent.llm import structured_call
@@ -11,7 +12,8 @@ from nocode_agent.openapi import validate_arguments
 
 CALL_SYSTEM = """You turn one planned step into a single platform workflow call.
 Use only the documentation excerpts and the ids in the known objects. Never invent ids.
-Return the workflow name and its arguments, including path parameters such as app_id."""
+Return the workflow name and its arguments, including path parameters such as app_id.
+To use an id of a known object write a reference like $app.id instead of the number."""
 
 
 def current_step(state: AgentState) -> PlanStep:
@@ -72,6 +74,7 @@ def validate_node(deps: AgentDeps):
         call = state["pending_call"]
         step = current_step(state)
         errors: list[str] = []
+        call = {**call, "arguments": resolve_references(call["arguments"], state.get("refs", {}), errors)}
         if call["workflow"] != step.workflow:
             errors.append(f"the plan requires {step.workflow} but the call targets {call['workflow']}")
         operation = deps.operations.get(call["workflow"])
@@ -80,7 +83,7 @@ def validate_node(deps: AgentDeps):
         else:
             errors.extend(validate_arguments(operation, call["arguments"]))
         label = "arguments valid" if not errors else f"{len(errors)} validation errors"
-        return {"validation_errors": errors, "trace": [label]}
+        return {"pending_call": call, "validation_errors": errors, "trace": [label]}
 
     return validate
 
@@ -89,6 +92,9 @@ def execute_node(deps: AgentDeps):
     def execute(state: AgentState) -> dict[str, Any]:
         call = state["pending_call"]
         step = current_step(state)
+        if state.get("dry_run"):
+            output = {"id": len(state.get("results", [])) + 1, "dry_run": True, **call["arguments"]}
+            return _record(state, step, call, output, "validated only (dry run)")
         try:
             output = deps.tools[call["workflow"]].invoke(call["arguments"])
         except PlatformError as error:
@@ -96,17 +102,20 @@ def execute_node(deps: AgentDeps):
                 "validation_errors": [f"platform rejected the call: {error.detail}"],
                 "trace": [f"{call['workflow']} failed with {error.status_code}"],
             }
-        alias = step.bind_as or step.workflow
-        refs = {**state.get("refs", {}), alias: output}
-        record = {"workflow": call["workflow"], "arguments": call["arguments"], "output": output}
-        return {
-            "refs": refs,
-            "results": [record],
-            "validation_errors": [],
-            "trace": [f"{call['workflow']} ok, saved as {alias}"],
-        }
+        return _record(state, step, call, output, "ok")
 
     return execute
+
+
+def _record(state: AgentState, step: PlanStep, call: dict[str, Any], output: dict[str, Any], note: str) -> dict[str, Any]:
+    alias = step.bind_as or step.workflow
+    record = {"workflow": call["workflow"], "arguments": call["arguments"], "output": output}
+    return {
+        "refs": {**state.get("refs", {}), alias: output},
+        "results": [record],
+        "validation_errors": [],
+        "trace": [f"{call['workflow']} {note}, saved as {alias}"],
+    }
 
 
 def advance_node(state: AgentState) -> dict[str, Any]:

@@ -23,17 +23,21 @@ class AgentRuntime:
     graph: Any
     deps: AgentDeps
 
-    def run(self, request: str, thread_id: str | None = None, intent: str | None = None) -> dict[str, Any]:
+    def run(
+        self, request: str, thread_id: str | None = None, intent: str | None = None, dry_run: bool = False
+    ) -> dict[str, Any]:
         config = {"configurable": {"thread_id": thread_id or uuid.uuid4().hex}}
-        payload: dict[str, Any] = {"request": request}
+        payload: dict[str, Any] = {"request": request, "dry_run": dry_run}
         if intent:
             payload["intent"] = intent
         return self.graph.invoke(payload, config)
 
-    def stream(self, request: str, thread_id: str | None = None, intent: str | None = None) -> Iterator[dict[str, Any]]:
+    def stream(
+        self, request: str, thread_id: str | None = None, intent: str | None = None, dry_run: bool = False
+    ) -> Iterator[dict[str, Any]]:
         thread = thread_id or uuid.uuid4().hex
         config = {"configurable": {"thread_id": thread}}
-        payload: dict[str, Any] = {"request": request}
+        payload: dict[str, Any] = {"request": request, "dry_run": dry_run}
         if intent:
             payload["intent"] = intent
         for namespace, update in self.graph.stream(payload, config, stream_mode="updates", subgraphs=True):

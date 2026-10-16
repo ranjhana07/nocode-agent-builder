@@ -79,12 +79,12 @@ def create_api(
         agent = runtime()
         thread_id = body.thread_id or uuid.uuid4().hex
         if not body.stream:
-            state = agent.run(body.request, thread_id, body.intent)
+            state = agent.run(body.request, thread_id, body.intent, body.dry_run)
             return AgentResponse(**final_payload(state, thread_id))
 
         def events() -> Iterator[str]:
             try:
-                for event in agent.stream(body.request, thread_id, body.intent):
+                for event in agent.stream(body.request, thread_id, body.intent, body.dry_run):
                     if event["node"] == "__end__":
                         yield sse("final", final_payload(event["state"], thread_id))
                     else:

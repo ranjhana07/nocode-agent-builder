@@ -69,11 +69,12 @@ def run(
     request: str,
     thread: str | None = typer.Option(None, "--thread"),
     quiet: bool = typer.Option(False, "--quiet", help="Only print the final summary"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Validate every call but do not touch the platform"),
 ) -> None:
     from nocode_agent.agent.runtime import build_runtime
 
     final: dict = {}
-    for event in build_runtime().stream(request, thread, intent="build"):
+    for event in build_runtime().stream(request, thread, intent="build", dry_run=dry_run):
         if event["node"] == "__end__":
             final = event["state"]
         elif not quiet:
