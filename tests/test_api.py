@@ -101,3 +101,10 @@ def test_thread_state_can_be_read_back_or_is_404(client: TestClient) -> None:
     client.post("/agent/run", json={"request": "build me an orders app", "stream": False, "thread_id": "keep"})
     assert client.get("/agent/threads/keep").status_code == 200
     assert client.get("/agent/threads/never-existed").status_code == 404
+
+
+def test_dry_run_flag_reaches_the_graph(client: TestClient) -> None:
+    response = client.post("/agent/run", json={"request": "build me an orders app", "stream": False, "dry_run": True})
+    body = response.json()
+    assert body["status"] == "completed"
+    assert body["results"][0]["output"]["dry_run"] is True
