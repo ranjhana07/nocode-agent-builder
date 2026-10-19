@@ -1,14 +1,16 @@
 from __future__ import annotations
 
+import hmac
 import json
 import uuid
 from collections.abc import Callable, Iterator
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse
 
 from nocode_agent.agent.runtime import AgentRuntime, build_runtime
+from nocode_agent.config import get_settings
 from nocode_agent.api.schemas import AgentRequest, AgentResponse, RagHit, RagQuery, RagResponse
 from nocode_agent.rag.filters import MetadataFilter
 from nocode_agent.rag.service import RagStack, build_rag_stack
@@ -28,11 +30,24 @@ def final_payload(state: dict[str, Any], thread_id: str) -> dict[str, Any]:
     }
 
 
+def token_guard(expected: str | None):
+    def check(authorization: str | None = Header(default=None)) -> None:
+        if expected is None:
+            return
+        scheme, _, supplied = (authorization or "").partition(" ")
+        if scheme.lower() != "bearer" or not hmac.compare_digest(supplied, expected):
+            raise HTTPException(status_code=401, detail="missing or invalid bearer token")
+
+    return check
+
+
 def create_api(
     rag_factory: Callable[[], RagStack] = build_rag_stack,
     runtime_factory: Callable[[], AgentRuntime] = build_runtime,
+    api_token: str | None = None,
 ) -> FastAPI:
     app = FastAPI(title="Nocode agent builder", version="0.1.0")
+    guard = [Depends(token_guard(api_token))]
     cache: dict[str, Any] = {}
 
     def rag() -> RagStack:
@@ -49,7 +64,7 @@ def create_api(
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
-    @app.post("/rag/query", response_model=RagResponse)
+    @app.post("/rag/query", response_model=RagResponse, dependencies=guard)
     def rag_query(body: RagQuery) -> RagResponse:
         retriever = rag().retriever
         metadata_filter = MetadataFilter(
@@ -74,7 +89,7 @@ def create_api(
         ]
         return RagResponse(queries=result.queries, hits=hits)
 
-    @app.post("/agent/run")
+    @app.post("/agent/run", dependencies=guard)
     def agent_run(body: AgentRequest):
         agent = runtime()
         thread_id = body.thread_id or uuid.uuid4().hex
@@ -94,7 +109,7 @@ def create_api(
 
         return StreamingResponse(events(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"})
 
-    @app.get("/agent/threads/{thread_id}")
+    @app.get("/agent/threads/{thread_id}", dependencies=guard)
     def thread_state(thread_id: str) -> AgentResponse:
         values = runtime().graph.get_state({"configurable": {"thread_id": thread_id}}).values
         if not values:
@@ -105,4 +120,4 @@ def create_api(
 
 
 def build_app() -> FastAPI:
-    return create_api()
+    return create_api(api_token=get_settings().api_token)
