@@ -108,3 +108,14 @@ def test_dry_run_flag_reaches_the_graph(client: TestClient) -> None:
     body = response.json()
     assert body["status"] == "completed"
     assert body["results"][0]["output"]["dry_run"] is True
+
+
+def test_bearer_token_guards_rag_and_agent_routes() -> None:
+    guarded = TestClient(create_api(rag_factory=rag_stack, runtime_factory=runtime, api_token="s3cret"))
+    assert guarded.get("/health").status_code == 200
+    body = {"query": "publish the site"}
+    assert guarded.post("/rag/query", json=body).status_code == 401
+    assert guarded.post("/rag/query", json=body, headers={"Authorization": "Bearer nope"}).status_code == 401
+    assert guarded.post("/rag/query", json=body, headers={"Authorization": "Basic s3cret"}).status_code == 401
+    assert guarded.post("/rag/query", json=body, headers={"Authorization": "Bearer s3cret"}).status_code == 200
+    assert guarded.post("/agent/run", json={"request": "build an app", "stream": False}).status_code == 401

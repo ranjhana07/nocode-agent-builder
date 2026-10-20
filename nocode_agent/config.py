@@ -51,6 +51,7 @@ class Settings(BaseSettings):
     max_replans: int = Field(default=2, ge=0)
     max_plan_steps: int = Field(default=60, ge=1)
 
+    api_token: str | None = None
     langsmith_dataset: str = "nocode-agent-eval"
     eval_dataset_path: Path = Path("data/eval/questions.jsonl")
     retrieval_queries_path: Path = Path("data/eval/retrieval_queries.jsonl")
