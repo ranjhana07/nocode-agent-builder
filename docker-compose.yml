@@ -8,6 +8,11 @@ services:
       - platform-data:/data
     ports:
       - "9000:9000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
   chroma:
     image: chromadb/chroma:latest
@@ -35,8 +40,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - platform
-      - chroma
+      platform:
+        condition: service_healthy
+      chroma:
+        condition: service_started
 
 volumes:
   platform-data:
