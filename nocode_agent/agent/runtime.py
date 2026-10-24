@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 import uuid
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -40,9 +41,19 @@ class AgentRuntime:
         payload: dict[str, Any] = {"request": request, "dry_run": dry_run}
         if intent:
             payload["intent"] = intent
+        mark = time.perf_counter()
         for namespace, update in self.graph.stream(payload, config, stream_mode="updates", subgraphs=True):
+            now = time.perf_counter()
+            elapsed_ms = round((now - mark) * 1000)
+            mark = now
             for node, values in update.items():
-                yield {"thread_id": thread, "node": node, "subgraph": bool(namespace), "trace": (values or {}).get("trace", [])}
+                yield {
+                    "thread_id": thread,
+                    "node": node,
+                    "subgraph": bool(namespace),
+                    "trace": (values or {}).get("trace", []),
+                    "elapsed_ms": elapsed_ms,
+                }
         final = self.graph.get_state(config).values
         yield {"thread_id": thread, "node": "__end__", "subgraph": False, "state": final}
 

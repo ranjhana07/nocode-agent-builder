@@ -119,3 +119,9 @@ def test_bearer_token_guards_rag_and_agent_routes() -> None:
     assert guarded.post("/rag/query", json=body, headers={"Authorization": "Basic s3cret"}).status_code == 401
     assert guarded.post("/rag/query", json=body, headers={"Authorization": "Bearer s3cret"}).status_code == 200
     assert guarded.post("/agent/run", json={"request": "build an app", "stream": False}).status_code == 401
+
+
+def test_step_events_carry_timings(client: TestClient) -> None:
+    events = parse_sse(client.post("/agent/run", json={"request": "build me an orders app"}).text)
+    steps = [payload for name, payload in events if name == "step"]
+    assert steps and all(isinstance(step["elapsed_ms"], int) and step["elapsed_ms"] >= 0 for step in steps)
