@@ -100,6 +100,18 @@ def run_platform(host: str = "0.0.0.0", port: int = 9000) -> None:
 
 
 @app.command()
+def doctor() -> None:
+    from nocode_agent.doctor import run_checks
+
+    failed = 0
+    for check in run_checks(get_settings()):
+        typer.echo(f"{'ok  ' if check.ok else 'FAIL'} {check.name}: {check.detail}")
+        failed += not check.ok
+    if failed:
+        raise typer.Exit(code=1)
+
+
+@app.command()
 def dataset() -> None:
     from nocode_agent.evals.dataset import generate_datasets
 
