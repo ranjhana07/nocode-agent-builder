@@ -130,6 +130,7 @@ def eval_retrieval(
     multi_query: bool = typer.Option(False, "--multi-query", help="Include the multi-query system, needs an LLM key"),
     limit: int | None = typer.Option(None, "--limit"),
     results_dir: Path = typer.Option(Path("results"), "--results-dir"),
+    show_misses: bool = typer.Option(False, "--show-misses", help="List queries the best system misses in the top 5"),
 ) -> None:
     settings = get_settings()
     llm = None
@@ -138,8 +139,14 @@ def eval_retrieval(
 
         llm = build_chat_model(settings)
     stack = build_rag_stack(settings, llm=llm, persistent=not in_memory)
-    results = run_retrieval_eval(stack.retriever, settings, multi_query, results_dir, limit)
-    typer.echo(format_table(results))
+    run = run_retrieval_eval(stack.retriever, settings, multi_query, results_dir, limit)
+    typer.echo(format_table(run.results))
+    if show_misses:
+        best = list(run.outcomes)[-1]
+        typer.echo(f"
+queries missed by {best}:")
+        for item in run.misses(best):
+            typer.echo(f"  {item.query_id}: {item.query}")
 
 
 @eval_app.command("agent")

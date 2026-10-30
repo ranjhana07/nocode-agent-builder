@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import os
 import platform
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from nocode_agent.config import Settings
 from nocode_agent.evals.dataset import read_jsonl
-from nocode_agent.rag.eval import RetrievalMetrics, SearchFn, rank_queries, summarize, write_results
+from nocode_agent.rag.eval import QueryOutcome, RetrievalMetrics, SearchFn, rank_queries, summarize, write_results
 from nocode_agent.rag.retriever import HybridRetriever
 
 DEPTH = 5
@@ -24,6 +25,15 @@ def build_systems(retriever: HybridRetriever, include_multi_query: bool) -> dict
     return systems
 
 
+@dataclass
+class RetrievalRun:
+    results: list[RetrievalMetrics]
+    outcomes: dict[str, list[QueryOutcome]] = field(default_factory=dict)
+
+    def misses(self, system: str, depth: int = DEPTH) -> list[QueryOutcome]:
+        return [item for item in self.outcomes[system] if item.rank is None or item.rank > depth]
+
+
 def group_of(query_id: str) -> str:
     return "intent" if query_id.startswith("i-") else "question"
 
@@ -34,13 +44,15 @@ def run_retrieval_eval(
     include_multi_query: bool,
     results_dir: Path | None = None,
     limit: int | None = None,
-) -> list[RetrievalMetrics]:
+) -> RetrievalRun:
     queries = read_jsonl(settings.retrieval_queries_path)
     if limit:
         queries = queries[:limit]
     results: list[RetrievalMetrics] = []
+    all_outcomes: dict[str, list[QueryOutcome]] = {}
     for name, search in build_systems(retriever, include_multi_query).items():
         outcomes = rank_queries(search, queries)
+        all_outcomes[name] = outcomes
         results.append(summarize(name, outcomes, "all"))
         for group in ("question", "intent"):
             subset = [item for item in outcomes if group_of(item.query_id) == group]
@@ -57,4 +69,4 @@ def run_retrieval_eval(
             "cpu_count": os.cpu_count(),
         }
         write_results(results, results_dir, "retrieval", context)
-    return results
+    return RetrievalRun(results, all_outcomes)
