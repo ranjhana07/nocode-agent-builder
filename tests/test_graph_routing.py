@@ -3,6 +3,8 @@ from __future__ import annotations
 import pytest
 
 from nocode_agent.agent import router
+from nocode_agent.agent.crag import RewrittenQuery
+from nocode_agent.agent.grader import ChunkGrade, GradeReport
 from nocode_agent.agent.graph import build_graph
 from nocode_agent.agent.planner import IntentDecision
 from nocode_agent.agent.state import BuildPlan, PlanStep, QuestionAnswer, ToolInvocation
@@ -149,9 +151,6 @@ def test_route_after_check() -> None:
 
 
 def test_question_without_usable_context_is_not_answered_by_guessing() -> None:
-    from nocode_agent.agent.grader import ChunkGrade, GradeReport
-    from nocode_agent.agent.crag import RewrittenQuery
-
     def nothing_relevant(messages):
         return GradeReport(grades=[ChunkGrade(index=index, score=0.0) for index in range(10)])
 

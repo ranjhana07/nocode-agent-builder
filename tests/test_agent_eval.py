@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -78,7 +79,7 @@ def test_score_example_skips_wrong_tool_without_an_expected_workflow() -> None:
 def test_local_eval_averages_per_metric(tmp_path: Path) -> None:
     dataset = tmp_path / "questions.jsonl"
     second = {**ROW, "id": "q2"}
-    dataset.write_text("\n".join(__import__("json").dumps(row) for row in (ROW, second)) + "\n", encoding="utf-8")
+    dataset.write_text("\n".join(json.dumps(row) for row in (ROW, second)) + "\n", encoding="utf-8")
     answers = iter(["publish_site", "create_app"])
 
     def target(inputs):

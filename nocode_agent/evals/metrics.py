@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-WORKFLOW_CATEGORIES = {"workflow_selection", "endpoint", "required_fields", "allowed_values", "default_value", "error_status"}
-
-
 def wrong_tool_call(expected_workflow: str | None, selected_workflow: str | None) -> float | None:
     if not expected_workflow:
         return None
