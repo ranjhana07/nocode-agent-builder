@@ -7,12 +7,18 @@ from rank_bm25 import BM25Okapi
 from nocode_agent.rag.filters import MetadataFilter
 from nocode_agent.rag.types import Chunk, ScoredChunk
 
-WORD = re.compile(r"[a-z0-9]+")
+WORD = re.compile(r"[a-z0-9_]+")
 STOPWORDS = frozenset("a an and are as at be by for from how in is it of on or that the this to what when which with".split())
 
 
 def tokenize(text: str) -> list[str]:
-    return [token for token in WORD.findall(text.lower()) if token not in STOPWORDS]
+    tokens: list[str] = []
+    for word in WORD.findall(text.lower()):
+        parts = [part for part in word.split("_") if part]
+        if "_" in word.strip("_") and len(parts) > 1:
+            tokens.append("_".join(parts))
+        tokens.extend(part for part in parts if part not in STOPWORDS)
+    return tokens
 
 
 class BM25Index:

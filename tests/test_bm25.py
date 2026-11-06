@@ -39,3 +39,17 @@ def test_no_matching_tokens_returns_nothing() -> None:
 
 def test_empty_index() -> None:
     assert BM25Index([]).search("anything", 3) == []
+
+
+def test_identifiers_are_kept_whole_and_split() -> None:
+    assert tokenize("call create_table now") == ["call", "create_table", "create", "table", "now"]
+    assert tokenize("_private") == ["private"]
+
+
+def test_identifier_query_prefers_the_exact_workflow() -> None:
+    chunks = [
+        Chunk("table", "create_table adds a table to a database", {}),
+        Chunk("db", "create_database creates a database, tables come later", {}),
+        Chunk("field", "add_field adds a field to a table", {}),
+    ]
+    assert BM25Index(chunks).search("create_table", 3)[0].chunk.id == "table"
