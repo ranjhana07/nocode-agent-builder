@@ -143,8 +143,7 @@ def eval_retrieval(
     typer.echo(format_table(run.results))
     if show_misses:
         best = list(run.outcomes)[-1]
-        typer.echo(f"
-queries missed by {best}:")
+        typer.echo(f"\nqueries missed by {best}:")
         for item in run.misses(best):
             typer.echo(f"  {item.query_id}: {item.query}")
 
