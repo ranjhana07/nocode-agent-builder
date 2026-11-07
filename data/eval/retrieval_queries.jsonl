@@ -1,153 +1,153 @@
-{"id": "q001", "query": "In the workspace members and permissions documentation, what is the value for: invitation validity?", "expected_sources": ["guides/workspace-members.md"]}
-{"id": "q002", "query": "Which API workflow should I call to create a dashboard layout page?", "expected_sources": ["api/create_page.md", "guides/pages-and-layouts.md"]}
-{"id": "q003", "query": "In the backups and recovery documentation, what is the value for: restoring overwrites the original database?", "expected_sources": ["guides/backups-and-recovery.md"]}
-{"id": "q004", "query": "Which parameters must I send when calling create_table?", "expected_sources": ["api/create_table.md", "openapi.json"]}
-{"id": "q005", "query": "Which status code does create_page return when the slug has invalid characters or the app already has 50 pages?", "expected_sources": ["api/create_page.md"]}
-{"id": "q006", "query": "Which values does the kind parameter of create_relation accept?", "expected_sources": ["api/create_relation.md", "openapi.json"]}
-{"id": "q007", "query": "In the backups and recovery documentation, what is the value for: snapshots per day?", "expected_sources": ["guides/backups-and-recovery.md"]}
-{"id": "q008", "query": "In the deployment checklist documentation, what is the value for: publishing again causes downtime?", "expected_sources": ["guides/deployment-checklist.md"]}
-{"id": "q009", "query": "Which status code does create_form return when input names are not unique or the form has more than 40 inputs?", "expected_sources": ["api/create_form.md"]}
-{"id": "q010", "query": "Which HTTP method and path does create_auth_flow use?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
-{"id": "q011", "query": "What does the create_app workflow do?", "expected_sources": ["api/create_app.md"]}
-{"id": "q012", "query": "What does the add_field workflow do?", "expected_sources": ["api/add_field.md"]}
-{"id": "q013", "query": "Which status code does add_field return when the table already has a field with this name?", "expected_sources": ["api/add_field.md"]}
-{"id": "q014", "query": "Which parameters must I send when calling create_page?", "expected_sources": ["api/create_page.md", "openapi.json"]}
-{"id": "q015", "query": "Which HTTP method and path does create_database use?", "expected_sources": ["api/create_database.md", "openapi.json"]}
-{"id": "q016", "query": "Which status code does bind_form_to_table return when the table belongs to another app, or the mapping names an unknown input or field?", "expected_sources": ["api/bind_form_to_table.md"]}
-{"id": "q017", "query": "Which values does the type parameter of add_field accept?", "expected_sources": ["api/add_field.md", "openapi.json"]}
-{"id": "q018", "query": "Which API workflow should I call to make a new database named main for an app?", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
-{"id": "q019", "query": "What is the default value of require_verification in create_auth_flow?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
-{"id": "q020", "query": "Which API workflow should I call to add an email column to a table?", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
-{"id": "q021", "query": "Which parameters must I send when calling seed_records?", "expected_sources": ["api/seed_records.md", "openapi.json"]}
-{"id": "q022", "query": "Which API workflow should I call to set up roles like admin and editor?", "expected_sources": ["api/create_auth_flow.md", "guides/authentication.md", "guides/customer-portal-signin.md"]}
-{"id": "q023", "query": "Which values does the template parameter of create_app accept?", "expected_sources": ["api/create_app.md", "openapi.json"]}
-{"id": "q024", "query": "In the getting started with nocode documentation, what is the value for: default environment when publishing?", "expected_sources": ["guides/getting-started.md"]}
-{"id": "q025", "query": "What does the create_relation workflow do?", "expected_sources": ["api/create_relation.md"]}
-{"id": "q026", "query": "Which API workflow should I call to connect my form to the customers table?", "expected_sources": ["api/bind_form_to_table.md", "guides/form-binding.md"]}
-{"id": "q027", "query": "Which API workflow should I call to start a brand new app for tracking orders?", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
-{"id": "q028", "query": "Which parameters must I send when calling publish_site?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
-{"id": "q029", "query": "In the webhooks and integrations documentation, what is the value for: delivery retries?", "expected_sources": ["guides/webhooks.md"]}
-{"id": "q030", "query": "Which API workflow should I call to make a form that asks users for feedback?", "expected_sources": ["api/create_form.md", "guides/forms.md"]}
-{"id": "q031", "query": "In the getting started with nocode documentation, what is the value for: maximum components per page?", "expected_sources": ["guides/getting-started.md"]}
-{"id": "q032", "query": "Which status code does seed_records return when the table does not exist?", "expected_sources": ["api/seed_records.md"]}
-{"id": "q033", "query": "Which API workflow should I call to spin up an empty app called Helpdesk?", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
-{"id": "q034", "query": "Which status code does add_field return when the table does not exist?", "expected_sources": ["api/add_field.md"]}
-{"id": "q035", "query": "In the glossary documentation, what is the value for: object that holds records?", "expected_sources": ["guides/glossary.md"]}
-{"id": "q036", "query": "Which status code does create_database return when the app already has a database with this name?", "expected_sources": ["api/create_database.md"]}
-{"id": "q037", "query": "Which status code does publish_site return when the app does not exist?", "expected_sources": ["api/publish_site.md"]}
-{"id": "q038", "query": "Which API workflow should I call to make a landing page at the slug home?", "expected_sources": ["api/create_page.md", "guides/pages-and-layouts.md"]}
-{"id": "q039", "query": "Which API workflow should I call to add a new screen to my app?", "expected_sources": ["api/create_page.md", "guides/pages-and-layouts.md"]}
-{"id": "q040", "query": "In the authentication and roles documentation, what is the value for: maximum roles per app?", "expected_sources": ["guides/authentication.md"]}
-{"id": "q041", "query": "In the field data types documentation, what is the value for: number of field types?", "expected_sources": ["guides/data-types.md"]}
-{"id": "q042", "query": "Which workflow has to run before add_field?", "expected_sources": ["guides/workflow-order.md"]}
-{"id": "q043", "query": "Which parameters must I send when calling bind_form_to_table?", "expected_sources": ["api/bind_form_to_table.md", "openapi.json"]}
-{"id": "q044", "query": "In the tables and fields documentation, what is the value for: default primary key name?", "expected_sources": ["guides/tables-and-fields.md"]}
-{"id": "q045", "query": "Which parameters must I send when calling create_auth_flow?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
-{"id": "q046", "query": "What does the add_component workflow do?", "expected_sources": ["api/add_component.md"]}
-{"id": "q047", "query": "Which HTTP method and path does create_table use?", "expected_sources": ["api/create_table.md", "openapi.json"]}
-{"id": "q048", "query": "In the glossary documentation, what is the value for: number of api workflows?", "expected_sources": ["guides/glossary.md"]}
-{"id": "q049", "query": "Which values does the layout parameter of create_page accept?", "expected_sources": ["api/create_page.md", "openapi.json"]}
-{"id": "q050", "query": "What is the default value of submit_label in create_form?", "expected_sources": ["api/create_form.md", "openapi.json"]}
-{"id": "q051", "query": "Which values does the method parameter of create_auth_flow accept?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
-{"id": "q052", "query": "In the databases overview documentation, what is the value for: database name length?", "expected_sources": ["guides/databases-overview.md"]}
-{"id": "q053", "query": "Which API workflow should I call to set up a database inside my app?", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
-{"id": "q054", "query": "In the theming and branding documentation, what is the value for: dark mode follows the system setting?", "expected_sources": ["guides/theming.md"]}
-{"id": "q055", "query": "Which API workflow should I call to define a table with a custom primary key?", "expected_sources": ["api/create_table.md"]}
-{"id": "q056", "query": "What is the default value of position in add_component?", "expected_sources": ["api/add_component.md", "openapi.json"]}
-{"id": "q057", "query": "In the frequently asked questions documentation, what is the value for: fields are optional unless?", "expected_sources": ["guides/faq.md"]}
-{"id": "q058", "query": "In the workspace members and permissions documentation, what is the value for: role that can manage billing?", "expected_sources": ["guides/workspace-members.md"]}
-{"id": "q059", "query": "Which status code does create_form return when the app does not exist?", "expected_sources": ["api/create_form.md"]}
-{"id": "q060", "query": "Which status code does add_field return when enum_values is missing for an enum field or present for another type?", "expected_sources": ["api/add_field.md"]}
-{"id": "q061", "query": "Which workflow has to run before add_component?", "expected_sources": ["guides/workflow-order.md"]}
-{"id": "q062", "query": "What does the create_form workflow do?", "expected_sources": ["api/create_form.md"]}
-{"id": "q063", "query": "What does the seed_records workflow do?", "expected_sources": ["api/seed_records.md"]}
-{"id": "q064", "query": "Which API workflow should I call to make a new application from the inventory template?", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
-{"id": "q065", "query": "In the forms documentation, what is the value for: inputs per form?", "expected_sources": ["guides/forms.md"]}
-{"id": "q066", "query": "Which API workflow should I call to connect two tables with a one to many relation?", "expected_sources": ["api/create_relation.md", "guides/relations.md"]}
-{"id": "q067", "query": "Which status code does create_app return when the name is too short or the template is unknown?", "expected_sources": ["api/create_app.md"]}
-{"id": "q068", "query": "In the publishing and environments documentation, what is the value for: default publish environment?", "expected_sources": ["guides/publishing.md"]}
-{"id": "q069", "query": "Which parameters must I send when calling add_field?", "expected_sources": ["api/add_field.md", "openapi.json"]}
-{"id": "q070", "query": "Which HTTP method and path does publish_site use?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
-{"id": "q071", "query": "What does the create_database workflow do?", "expected_sources": ["api/create_database.md"]}
-{"id": "q072", "query": "In the forms documentation, what is the value for: default submit label?", "expected_sources": ["guides/forms.md"]}
-{"id": "q073", "query": "Which parameters must I send when calling create_relation?", "expected_sources": ["api/create_relation.md", "openapi.json"]}
-{"id": "q074", "query": "Which API workflow should I call to save form submissions into a table?", "expected_sources": ["api/bind_form_to_table.md", "guides/form-binding.md"]}
-{"id": "q075", "query": "What is the default value of layout in create_page?", "expected_sources": ["api/create_page.md", "openapi.json"]}
-{"id": "q076", "query": "In the rate limits documentation, what is the value for: header that carries the wait time?", "expected_sources": ["guides/rate-limits.md"]}
-{"id": "q077", "query": "Which HTTP method and path does add_component use?", "expected_sources": ["api/add_component.md", "openapi.json"]}
-{"id": "q078", "query": "Which API workflow should I call to give my app a place to store data?", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
-{"id": "q079", "query": "Which status code does create_app return when an app with the same name already exists?", "expected_sources": ["api/create_app.md"]}
-{"id": "q080", "query": "In the platform changelog documentation, what is the value for: version that raised the seed limit to 500?", "expected_sources": ["guides/changelog.md"]}
-{"id": "q081", "query": "In the apps and templates documentation, what is the value for: app name length?", "expected_sources": ["guides/apps-and-templates.md"]}
-{"id": "q082", "query": "What does the create_page workflow do?", "expected_sources": ["api/create_page.md"]}
-{"id": "q083", "query": "In the getting started with nocode documentation, what is the value for: starter templates available?", "expected_sources": ["guides/getting-started.md"]}
-{"id": "q084", "query": "What is the default value of environment in publish_site?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
-{"id": "q085", "query": "Which parameters must I send when calling create_app?", "expected_sources": ["api/create_app.md", "openapi.json"]}
-{"id": "q086", "query": "In the seeding data documentation, what is the value for: maximum records per seed call?", "expected_sources": ["guides/seeding-data.md"]}
-{"id": "q087", "query": "Which HTTP method and path does bind_form_to_table use?", "expected_sources": ["api/bind_form_to_table.md", "openapi.json"]}
-{"id": "q088", "query": "In the pages and layouts documentation, what is the value for: default page layout?", "expected_sources": ["guides/pages-and-layouts.md"]}
-{"id": "q089", "query": "In the components reference documentation, what is the value for: maximum position value?", "expected_sources": ["guides/components.md"]}
-{"id": "q090", "query": "In the platform changelog documentation, what is the value for: version that introduced form binding?", "expected_sources": ["guides/changelog.md"]}
-{"id": "q091", "query": "Which API workflow should I call to import a batch of test data?", "expected_sources": ["api/seed_records.md", "guides/seeding-data.md"]}
+{"id": "q001", "query": "In the frequently asked questions documentation, what is the value for: fields are optional unless?", "expected_sources": ["guides/faq.md"]}
+{"id": "q002", "query": "Which API workflow should I call to add a new screen to my app?", "expected_sources": ["api/create_page.md", "guides/pages-and-layouts.md"]}
+{"id": "q003", "query": "Which values does the type parameter of add_field accept?", "expected_sources": ["api/add_field.md", "openapi.json"]}
+{"id": "q004", "query": "Which API workflow should I call to create a dashboard layout page?", "expected_sources": ["api/create_page.md", "guides/pages-and-layouts.md"]}
+{"id": "q005", "query": "What does the add_field workflow do?", "expected_sources": ["api/add_field.md"]}
+{"id": "q006", "query": "In the frequently asked questions documentation, what is the value for: forms bound to one table at a time?", "expected_sources": ["guides/faq.md"]}
+{"id": "q007", "query": "Which parameters must I send when calling bind_form_to_table?", "expected_sources": ["api/bind_form_to_table.md", "openapi.json"]}
+{"id": "q008", "query": "Which status code does create_relation return when one of the tables does not exist?", "expected_sources": ["api/create_relation.md"]}
+{"id": "q009", "query": "Which API workflow should I call to place a chart component on my dashboard page?", "expected_sources": ["api/add_component.md", "guides/components.md"]}
+{"id": "q010", "query": "Which status code does create_page return when the app does not exist?", "expected_sources": ["api/create_page.md"]}
+{"id": "q011", "query": "Which values does the method parameter of create_auth_flow accept?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
+{"id": "q012", "query": "Which API workflow should I call to set up a database inside my app?", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
+{"id": "q013", "query": "Which HTTP method and path does create_form use?", "expected_sources": ["api/create_form.md", "openapi.json"]}
+{"id": "q014", "query": "Which API workflow should I call to set up roles like admin and editor?", "expected_sources": ["api/create_auth_flow.md", "guides/authentication.md", "guides/customer-portal-signin.md"]}
+{"id": "q015", "query": "Which API workflow should I call to make a landing page at the slug home?", "expected_sources": ["api/create_page.md", "guides/pages-and-layouts.md"]}
+{"id": "q016", "query": "In the data modeling tips documentation, what is the value for: fields are referenced by?", "expected_sources": ["guides/data-modeling-tips.md"]}
+{"id": "q017", "query": "Which status code does add_field return when the table already has a field with this name?", "expected_sources": ["api/add_field.md"]}
+{"id": "q018", "query": "Which status code does create_page return when the slug is already used by another page of the app?", "expected_sources": ["api/create_page.md"]}
+{"id": "q019", "query": "What is the default value of layout in create_page?", "expected_sources": ["api/create_page.md", "openapi.json"]}
+{"id": "q020", "query": "In the rate limits documentation, what is the value for: status code when the limit is hit?", "expected_sources": ["guides/rate-limits.md"]}
+{"id": "q021", "query": "Which parameters must I send when calling create_table?", "expected_sources": ["api/create_table.md", "openapi.json"]}
+{"id": "q022", "query": "In the platform changelog documentation, what is the value for: version that introduced form binding?", "expected_sources": ["guides/changelog.md"]}
+{"id": "q023", "query": "Which API workflow should I call to link orders to customers?", "expected_sources": ["api/create_relation.md", "guides/relations.md"]}
+{"id": "q024", "query": "Which parameters must I send when calling publish_site?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
+{"id": "q025", "query": "Which API workflow should I call to connect my form to the customers table?", "expected_sources": ["api/bind_form_to_table.md", "guides/form-binding.md"]}
+{"id": "q026", "query": "What does the create_auth_flow workflow do?", "expected_sources": ["api/create_auth_flow.md"]}
+{"id": "q027", "query": "What does the create_relation workflow do?", "expected_sources": ["api/create_relation.md"]}
+{"id": "q028", "query": "Which status code does publish_site return when the app does not exist?", "expected_sources": ["api/publish_site.md"]}
+{"id": "q029", "query": "Which parameters must I send when calling create_database?", "expected_sources": ["api/create_database.md", "openapi.json"]}
+{"id": "q030", "query": "Which status code does create_form return when input names are not unique or the form has more than 40 inputs?", "expected_sources": ["api/create_form.md"]}
+{"id": "q031", "query": "Which values does the template parameter of create_app accept?", "expected_sources": ["api/create_app.md", "openapi.json"]}
+{"id": "q032", "query": "Which workflow has to run before add_field?", "expected_sources": ["guides/workflow-order.md"]}
+{"id": "q033", "query": "In the seeding data documentation, what is the value for: maximum records per seed call?", "expected_sources": ["guides/seeding-data.md"]}
+{"id": "q034", "query": "What is the default value of position in add_component?", "expected_sources": ["api/add_component.md", "openapi.json"]}
+{"id": "q035", "query": "Which API workflow should I call to define a table with a custom primary key?", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
+{"id": "q036", "query": "Which API workflow should I call to load some sample rows into a table?", "expected_sources": ["api/seed_records.md", "guides/seeding-data.md"]}
+{"id": "q037", "query": "What does the create_form workflow do?", "expected_sources": ["api/create_form.md"]}
+{"id": "q038", "query": "In the theming and branding documentation, what is the value for: dark mode follows the system setting?", "expected_sources": ["guides/theming.md"]}
+{"id": "q039", "query": "Which HTTP method and path does create_table use?", "expected_sources": ["api/create_table.md", "openapi.json"]}
+{"id": "q040", "query": "Which status code does create_form return when the app does not exist?", "expected_sources": ["api/create_form.md"]}
+{"id": "q041", "query": "Which HTTP method and path does create_database use?", "expected_sources": ["api/create_database.md", "openapi.json"]}
+{"id": "q042", "query": "In the publishing and environments documentation, what is the value for: custom domains?", "expected_sources": ["guides/publishing.md"]}
+{"id": "q043", "query": "Which parameters must I send when calling create_auth_flow?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
+{"id": "q044", "query": "Which status code does bind_form_to_table return when the table belongs to another app, or the mapping names an unknown input or field?", "expected_sources": ["api/bind_form_to_table.md"]}
+{"id": "q045", "query": "In the backups and recovery documentation, what is the value for: snapshots per day?", "expected_sources": ["guides/backups-and-recovery.md"]}
+{"id": "q046", "query": "In the databases overview documentation, what is the value for: tables per database?", "expected_sources": ["guides/databases-overview.md"]}
+{"id": "q047", "query": "In the components reference documentation, what is the value for: components per page?", "expected_sources": ["guides/components.md"]}
+{"id": "q048", "query": "What does the add_component workflow do?", "expected_sources": ["api/add_component.md"]}
+{"id": "q049", "query": "In the frequently asked questions documentation, what is the value for: records survive table deletion?", "expected_sources": ["guides/faq.md"]}
+{"id": "q050", "query": "Which API workflow should I call to add an email column to a table?", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
+{"id": "q051", "query": "In the getting started with nocode documentation, what is the value for: maximum components per page?", "expected_sources": ["guides/getting-started.md"]}
+{"id": "q052", "query": "In the getting started with nocode documentation, what is the value for: maximum pages per app?", "expected_sources": ["guides/getting-started.md"]}
+{"id": "q053", "query": "In the getting started with nocode documentation, what is the value for: default environment when publishing?", "expected_sources": ["guides/getting-started.md"]}
+{"id": "q054", "query": "Which HTTP method and path does create_auth_flow use?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
+{"id": "q055", "query": "In the billing and plans documentation, what is the value for: apps allowed on the free plan?", "expected_sources": ["guides/billing-and-plans.md"]}
+{"id": "q056", "query": "Which API workflow should I call to make a form that asks users for feedback?", "expected_sources": ["api/create_form.md", "guides/forms.md"]}
+{"id": "q057", "query": "What is the default value of submit_label in create_form?", "expected_sources": ["api/create_form.md", "openapi.json"]}
+{"id": "q058", "query": "Which values does the layout parameter of create_page accept?", "expected_sources": ["api/create_page.md", "openapi.json"]}
+{"id": "q059", "query": "Which values does the kind parameter of create_relation accept?", "expected_sources": ["api/create_relation.md", "openapi.json"]}
+{"id": "q060", "query": "Which values does the type parameter of add_component accept?", "expected_sources": ["api/add_component.md", "openapi.json"]}
+{"id": "q061", "query": "In the platform changelog documentation, what is the value for: version that added custom domains?", "expected_sources": ["guides/changelog.md"]}
+{"id": "q062", "query": "Which parameters must I send when calling create_page?", "expected_sources": ["api/create_page.md", "openapi.json"]}
+{"id": "q063", "query": "Which HTTP method and path does add_field use?", "expected_sources": ["api/add_field.md", "openapi.json"]}
+{"id": "q064", "query": "In the field data types documentation, what is the value for: number of field types?", "expected_sources": ["guides/data-types.md"]}
+{"id": "q065", "query": "Which status code does bind_form_to_table return when the form or the table does not exist?", "expected_sources": ["api/bind_form_to_table.md"]}
+{"id": "q066", "query": "Which API workflow should I call to start a brand new app for tracking orders?", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
+{"id": "q067", "query": "In the authentication and roles documentation, what is the value for: maximum roles per app?", "expected_sources": ["guides/authentication.md"]}
+{"id": "q068", "query": "What does the seed_records workflow do?", "expected_sources": ["api/seed_records.md"]}
+{"id": "q069", "query": "What does the create_app workflow do?", "expected_sources": ["api/create_app.md"]}
+{"id": "q070", "query": "In the glossary documentation, what is the value for: object created by every publish?", "expected_sources": ["guides/glossary.md"]}
+{"id": "q071", "query": "What is the default value of require_verification in create_auth_flow?", "expected_sources": ["api/create_auth_flow.md", "openapi.json"]}
+{"id": "q072", "query": "Which status code does add_field return when enum_values is missing for an enum field or present for another type?", "expected_sources": ["api/add_field.md"]}
+{"id": "q073", "query": "In the pages and layouts documentation, what is the value for: page slug pattern?", "expected_sources": ["guides/pages-and-layouts.md"]}
+{"id": "q074", "query": "Which API workflow should I call to spin up an empty app called Helpdesk?", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
+{"id": "q075", "query": "Which status code does create_app return when an app with the same name already exists?", "expected_sources": ["api/create_app.md"]}
+{"id": "q076", "query": "Which API workflow should I call to make a new database named main for an app?", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
+{"id": "q077", "query": "In the naming conventions documentation, what is the value for: table and field names?", "expected_sources": ["guides/naming-conventions.md"]}
+{"id": "q078", "query": "Which API workflow should I call to make a new application from the inventory template?", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
+{"id": "q079", "query": "Which API workflow should I call to set up a many to many link between students and courses?", "expected_sources": ["api/create_relation.md", "guides/relations.md"]}
+{"id": "q080", "query": "Which API workflow should I call to connect two tables with a one to many relation?", "expected_sources": ["api/create_relation.md", "guides/relations.md"]}
+{"id": "q081", "query": "Which status code does create_relation return when the tables belong to different databases or a one_to_one relation points at its own table?", "expected_sources": ["api/create_relation.md"]}
+{"id": "q082", "query": "In the pages and layouts documentation, what is the value for: default page layout?", "expected_sources": ["guides/pages-and-layouts.md"]}
+{"id": "q083", "query": "Which parameters must I send when calling add_field?", "expected_sources": ["api/add_field.md", "openapi.json"]}
+{"id": "q084", "query": "Which HTTP method and path does publish_site use?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
+{"id": "q085", "query": "What does the create_database workflow do?", "expected_sources": ["api/create_database.md"]}
+{"id": "q086", "query": "In the publishing and environments documentation, what is the value for: default publish environment?", "expected_sources": ["guides/publishing.md"]}
+{"id": "q087", "query": "What is the default value of required in add_field?", "expected_sources": ["api/add_field.md", "openapi.json"]}
+{"id": "q088", "query": "Which parameters must I send when calling create_relation?", "expected_sources": ["api/create_relation.md", "openapi.json"]}
+{"id": "q089", "query": "Which API workflow should I call to save form submissions into a table?", "expected_sources": ["api/bind_form_to_table.md", "guides/form-binding.md"]}
+{"id": "q090", "query": "Which status code does seed_records return when the table does not exist?", "expected_sources": ["api/seed_records.md"]}
+{"id": "q091", "query": "Which status code does create_page return when the slug has invalid characters or the app already has 50 pages?", "expected_sources": ["api/create_page.md"]}
 {"id": "q092", "query": "In the theming and branding documentation, what is the value for: fonts per theme?", "expected_sources": ["guides/theming.md"]}
-{"id": "q093", "query": "What does the bind_form_to_table workflow do?", "expected_sources": ["api/bind_form_to_table.md"]}
-{"id": "q094", "query": "Which HTTP method and path does create_app use?", "expected_sources": ["api/create_app.md", "openapi.json"]}
-{"id": "q095", "query": "In the deployment checklist documentation, what is the value for: rollback method?", "expected_sources": ["guides/deployment-checklist.md"]}
-{"id": "q096", "query": "Which workflow has to run before create_table?", "expected_sources": ["guides/workflow-order.md"]}
-{"id": "q097", "query": "In the rate limits documentation, what is the value for: requests per minute per token?", "expected_sources": ["guides/rate-limits.md"]}
-{"id": "q098", "query": "Which HTTP method and path does seed_records use?", "expected_sources": ["api/seed_records.md", "openapi.json"]}
-{"id": "q099", "query": "What is the default value of primary_key in create_table?", "expected_sources": ["api/create_table.md", "openapi.json"]}
-{"id": "q100", "query": "Which status code does create_table return when the database already holds 100 tables?", "expected_sources": ["api/create_table.md"]}
-{"id": "q101", "query": "In the billing and plans documentation, what is the value for: apps allowed on the free plan?", "expected_sources": ["guides/billing-and-plans.md"]}
-{"id": "q102", "query": "Which API workflow should I call to make a new table called orders?", "expected_sources": ["api/create_table.md"]}
-{"id": "q103", "query": "Which parameters must I send when calling create_form?", "expected_sources": ["api/create_form.md", "openapi.json"]}
-{"id": "q104", "query": "Which API workflow should I call to build a contact form?", "expected_sources": ["api/create_form.md", "guides/forms.md"]}
-{"id": "q105", "query": "Which status code does create_database return when the app does not exist?", "expected_sources": ["api/create_database.md"]}
-{"id": "q106", "query": "In the webhooks and integrations documentation, what is the value for: signature header?", "expected_sources": ["guides/webhooks.md"]}
-{"id": "q107", "query": "What does the publish_site workflow do?", "expected_sources": ["api/publish_site.md"]}
-{"id": "q108", "query": "In the pages and layouts documentation, what is the value for: maximum slug length?", "expected_sources": ["guides/pages-and-layouts.md"]}
-{"id": "q109", "query": "Which HTTP method and path does create_form use?", "expected_sources": ["api/create_form.md", "openapi.json"]}
-{"id": "q110", "query": "Which parameters must I send when calling create_database?", "expected_sources": ["api/create_database.md", "openapi.json"]}
-{"id": "q111", "query": "Which status code does create_table return when the database already has a table with this name?", "expected_sources": ["api/create_table.md"]}
-{"id": "q112", "query": "Which API workflow should I call to map form inputs to table columns?", "expected_sources": ["api/bind_form_to_table.md", "guides/form-binding.md"]}
-{"id": "q113", "query": "Which API workflow should I call to let users log in with google?", "expected_sources": ["api/create_auth_flow.md", "guides/authentication.md", "guides/customer-portal-signin.md"]}
-{"id": "q114", "query": "Which status code does seed_records return when the table has no fields, a record is invalid or more than 500 records were sent?", "expected_sources": ["api/seed_records.md"]}
-{"id": "q115", "query": "Which status code does create_relation return when the tables belong to different databases or a one_to_one relation points at its own table?", "expected_sources": ["api/create_relation.md"]}
-{"id": "q116", "query": "Which HTTP method and path does create_relation use?", "expected_sources": ["api/create_relation.md", "openapi.json"]}
-{"id": "q117", "query": "Which status code does create_relation return when one of the tables does not exist?", "expected_sources": ["api/create_relation.md"]}
-{"id": "q118", "query": "Which API workflow should I call to link orders to customers?", "expected_sources": ["api/create_relation.md", "guides/relations.md"]}
-{"id": "q119", "query": "In the naming conventions documentation, what is the value for: table and field names?", "expected_sources": ["guides/naming-conventions.md"]}
+{"id": "q093", "query": "Which API workflow should I call to give my app a place to store data?", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
+{"id": "q094", "query": "In the databases overview documentation, what is the value for: database name length?", "expected_sources": ["guides/databases-overview.md"]}
+{"id": "q095", "query": "In the glossary documentation, what is the value for: number of api workflows?", "expected_sources": ["guides/glossary.md"]}
+{"id": "q096", "query": "Which status code does create_app return when the name is too short or the template is unknown?", "expected_sources": ["api/create_app.md"]}
+{"id": "q097", "query": "In the webhooks and integrations documentation, what is the value for: signature header?", "expected_sources": ["guides/webhooks.md"]}
+{"id": "q098", "query": "Which status code does create_database return when the app already has a database with this name?", "expected_sources": ["api/create_database.md"]}
+{"id": "q099", "query": "In the troubleshooting builds documentation, what is the value for: status code for a taken name?", "expected_sources": ["guides/troubleshooting.md"]}
+{"id": "q100", "query": "What does the create_page workflow do?", "expected_sources": ["api/create_page.md"]}
+{"id": "q101", "query": "What is the default value of description in create_app?", "expected_sources": ["api/create_app.md", "openapi.json"]}
+{"id": "q102", "query": "What is the default value of environment in publish_site?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
+{"id": "q103", "query": "Which workflow has to run before add_component?", "expected_sources": ["guides/workflow-order.md"]}
+{"id": "q104", "query": "Which API workflow should I call to put a button on a page?", "expected_sources": ["api/add_component.md", "guides/components.md"]}
+{"id": "q105", "query": "Which HTTP method and path does bind_form_to_table use?", "expected_sources": ["api/bind_form_to_table.md", "openapi.json"]}
+{"id": "q106", "query": "Which API workflow should I call to map form inputs to table columns?", "expected_sources": ["api/bind_form_to_table.md", "guides/form-binding.md"]}
+{"id": "q107", "query": "In the field data types documentation, what is the value for: date format?", "expected_sources": ["guides/data-types.md"]}
+{"id": "q108", "query": "Which API workflow should I call to let users log in with google?", "expected_sources": ["api/create_auth_flow.md", "guides/authentication.md", "guides/customer-portal-signin.md"]}
+{"id": "q109", "query": "Which API workflow should I call to import a batch of test data?", "expected_sources": ["api/seed_records.md", "guides/seeding-data.md"]}
+{"id": "q110", "query": "Which API workflow should I call to create a signup form with name and email?", "expected_sources": ["api/create_form.md", "guides/forms.md"]}
+{"id": "q111", "query": "What does the bind_form_to_table workflow do?", "expected_sources": ["api/bind_form_to_table.md"]}
+{"id": "q112", "query": "Which HTTP method and path does create_app use?", "expected_sources": ["api/create_app.md", "openapi.json"]}
+{"id": "q113", "query": "In the data modeling tips documentation, what is the value for: recommended table naming?", "expected_sources": ["guides/data-modeling-tips.md"]}
+{"id": "q114", "query": "Which status code does add_component return when the component type is unknown or the page already has 60 components?", "expected_sources": ["api/add_component.md"]}
+{"id": "q115", "query": "Which status code does create_auth_flow return when the app already has an auth flow?", "expected_sources": ["api/create_auth_flow.md"]}
+{"id": "q116", "query": "In the apps and templates documentation, what is the value for: app name length?", "expected_sources": ["guides/apps-and-templates.md"]}
+{"id": "q117", "query": "Which HTTP method and path does seed_records use?", "expected_sources": ["api/seed_records.md", "openapi.json"]}
+{"id": "q118", "query": "What is the default value of primary_key in create_table?", "expected_sources": ["api/create_table.md", "openapi.json"]}
+{"id": "q119", "query": "Which status code does create_table return when the database already holds 100 tables?", "expected_sources": ["api/create_table.md"]}
 {"id": "q120", "query": "Which API workflow should I call to deploy the app to staging for review?", "expected_sources": ["api/publish_site.md", "guides/deployment-checklist.md", "guides/publishing.md"]}
-{"id": "q121", "query": "In the databases overview documentation, what is the value for: tables per database?", "expected_sources": ["guides/databases-overview.md"]}
-{"id": "q122", "query": "Which status code does create_page return when the slug is already used by another page of the app?", "expected_sources": ["api/create_page.md"]}
-{"id": "q123", "query": "Which status code does create_page return when the app does not exist?", "expected_sources": ["api/create_page.md"]}
-{"id": "q124", "query": "Which status code does create_auth_flow return when the app already has an auth flow?", "expected_sources": ["api/create_auth_flow.md"]}
-{"id": "q125", "query": "What is the default value of description in create_app?", "expected_sources": ["api/create_app.md", "openapi.json"]}
-{"id": "q126", "query": "Which API workflow should I call to create a signup form with name and email?", "expected_sources": ["api/create_form.md", "guides/forms.md"]}
-{"id": "q127", "query": "What is the default value of required in add_field?", "expected_sources": ["api/add_field.md", "openapi.json"]}
-{"id": "q128", "query": "Which status code does create_auth_flow return when the app does not exist?", "expected_sources": ["api/create_auth_flow.md"]}
-{"id": "q129", "query": "Which parameters must I send when calling add_component?", "expected_sources": ["api/add_component.md", "openapi.json"]}
-{"id": "q130", "query": "Which status code does add_component return when the page does not exist?", "expected_sources": ["api/add_component.md"]}
-{"id": "q131", "query": "Which HTTP method and path does create_page use?", "expected_sources": ["api/create_page.md", "openapi.json"]}
-{"id": "q132", "query": "Which status code does create_table return when the database does not exist?", "expected_sources": ["api/create_table.md"]}
-{"id": "q133", "query": "Which values does the environment parameter of publish_site accept?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
-{"id": "q134", "query": "Which API workflow should I call to define a required text field on a table?", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
-{"id": "q135", "query": "What is the default value of template in create_app?", "expected_sources": ["api/create_app.md", "openapi.json"]}
-{"id": "q136", "query": "Which workflow has to run before bind_form_to_table?", "expected_sources": ["guides/workflow-order.md"]}
-{"id": "q137", "query": "What does the create_table workflow do?", "expected_sources": ["api/create_table.md"]}
-{"id": "q138", "query": "Which API workflow should I call to make my site live?", "expected_sources": ["api/publish_site.md", "guides/deployment-checklist.md", "guides/publishing.md"]}
-{"id": "q139", "query": "Which status code does add_component return when the component type is unknown or the page already has 60 components?", "expected_sources": ["api/add_component.md"]}
-{"id": "q140", "query": "In the webhooks and integrations documentation, what is the value for: native integrations?", "expected_sources": ["guides/webhooks.md"]}
-{"id": "q141", "query": "Which HTTP method and path does add_field use?", "expected_sources": ["api/add_field.md", "openapi.json"]}
-{"id": "q142", "query": "What does the create_auth_flow workflow do?", "expected_sources": ["api/create_auth_flow.md"]}
-{"id": "q143", "query": "In the publishing and environments documentation, what is the value for: custom domains?", "expected_sources": ["guides/publishing.md"]}
-{"id": "q144", "query": "Which API workflow should I call to load some sample rows into a table?", "expected_sources": ["api/seed_records.md", "guides/seeding-data.md"]}
-{"id": "q145", "query": "In the billing and plans documentation, what is the value for: invoice day of the month?", "expected_sources": ["guides/billing-and-plans.md"]}
-{"id": "q146", "query": "Which values does the type parameter of add_component accept?", "expected_sources": ["api/add_component.md", "openapi.json"]}
-{"id": "q147", "query": "Which status code does bind_form_to_table return when the form or the table does not exist?", "expected_sources": ["api/bind_form_to_table.md"]}
-{"id": "q148", "query": "Which API workflow should I call to put a button on a page?", "expected_sources": ["api/add_component.md", "guides/components.md"]}
-{"id": "q149", "query": "Which API workflow should I call to place a chart component on my dashboard page?", "expected_sources": ["api/add_component.md", "guides/components.md"]}
-{"id": "q150", "query": "Which API workflow should I call to set up a many to many link between students and courses?", "expected_sources": ["api/create_relation.md", "guides/relations.md"]}
+{"id": "q121", "query": "Which API workflow should I call to make a new table called orders?", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
+{"id": "q122", "query": "Which parameters must I send when calling create_form?", "expected_sources": ["api/create_form.md", "openapi.json"]}
+{"id": "q123", "query": "Which API workflow should I call to build a contact form?", "expected_sources": ["api/create_form.md", "guides/forms.md"]}
+{"id": "q124", "query": "Which status code does create_database return when the app does not exist?", "expected_sources": ["api/create_database.md"]}
+{"id": "q125", "query": "In the webhooks and integrations documentation, what is the value for: delivery retries?", "expected_sources": ["guides/webhooks.md"]}
+{"id": "q126", "query": "What does the publish_site workflow do?", "expected_sources": ["api/publish_site.md"]}
+{"id": "q127", "query": "In the troubleshooting builds documentation, what is the value for: fix for a blank published page?", "expected_sources": ["guides/troubleshooting.md"]}
+{"id": "q128", "query": "Which API workflow should I call to push my app to production on a custom domain?", "expected_sources": ["api/publish_site.md", "guides/deployment-checklist.md", "guides/publishing.md"]}
+{"id": "q129", "query": "In the backups and recovery documentation, what is the value for: restoring overwrites the original database?", "expected_sources": ["guides/backups-and-recovery.md"]}
+{"id": "q130", "query": "Which HTTP method and path does create_relation use?", "expected_sources": ["api/create_relation.md", "openapi.json"]}
+{"id": "q131", "query": "Which parameters must I send when calling seed_records?", "expected_sources": ["api/seed_records.md", "openapi.json"]}
+{"id": "q132", "query": "Which status code does seed_records return when the table has no fields, a record is invalid or more than 500 records were sent?", "expected_sources": ["api/seed_records.md"]}
+{"id": "q133", "query": "Which parameters must I send when calling create_app?", "expected_sources": ["api/create_app.md", "openapi.json"]}
+{"id": "q134", "query": "Which HTTP method and path does add_component use?", "expected_sources": ["api/add_component.md", "openapi.json"]}
+{"id": "q135", "query": "Which workflow has to run before bind_form_to_table?", "expected_sources": ["guides/workflow-order.md"]}
+{"id": "q136", "query": "Which status code does create_auth_flow return when the app does not exist?", "expected_sources": ["api/create_auth_flow.md"]}
+{"id": "q137", "query": "In the forms documentation, what is the value for: default submit label?", "expected_sources": ["guides/forms.md"]}
+{"id": "q138", "query": "Which workflow has to run before seed_records?", "expected_sources": ["guides/workflow-order.md"]}
+{"id": "q139", "query": "Which parameters must I send when calling add_component?", "expected_sources": ["api/add_component.md", "openapi.json"]}
+{"id": "q140", "query": "Which status code does add_component return when the page does not exist?", "expected_sources": ["api/add_component.md"]}
+{"id": "q141", "query": "Which HTTP method and path does create_page use?", "expected_sources": ["api/create_page.md", "openapi.json"]}
+{"id": "q142", "query": "Which status code does create_table return when the database does not exist?", "expected_sources": ["api/create_table.md"]}
+{"id": "q143", "query": "In the workspace members and permissions documentation, what is the value for: invitation validity?", "expected_sources": ["guides/workspace-members.md"]}
+{"id": "q144", "query": "Which values does the environment parameter of publish_site accept?", "expected_sources": ["api/publish_site.md", "openapi.json"]}
+{"id": "q145", "query": "Which API workflow should I call to define a required text field on a table?", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
+{"id": "q146", "query": "What is the default value of template in create_app?", "expected_sources": ["api/create_app.md", "openapi.json"]}
+{"id": "q147", "query": "In the webhooks and integrations documentation, what is the value for: native integrations?", "expected_sources": ["guides/webhooks.md"]}
+{"id": "q148", "query": "What does the create_table workflow do?", "expected_sources": ["api/create_table.md"]}
+{"id": "q149", "query": "Which workflow has to run before create_table?", "expected_sources": ["guides/workflow-order.md"]}
+{"id": "q150", "query": "Which API workflow should I call to make my site live?", "expected_sources": ["api/publish_site.md", "guides/deployment-checklist.md", "guides/publishing.md"]}
 {"id": "i-create_app-1", "query": "start a brand new app for tracking orders", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
 {"id": "i-create_app-2", "query": "make a new application from the inventory template", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
 {"id": "i-create_app-3", "query": "spin up an empty app called Helpdesk", "expected_sources": ["api/create_app.md", "guides/apps-and-templates.md"]}
@@ -168,11 +168,11 @@
 {"id": "i-create_database-3", "query": "set up a database inside my app", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
 {"id": "i-create_database-4", "query": "add a separate database for archived records", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
 {"id": "i-create_database-5", "query": "create an empty database for my app", "expected_sources": ["api/create_database.md", "guides/databases-overview.md"]}
-{"id": "i-create_table-1", "query": "add a customers table to my database", "expected_sources": ["api/create_table.md"]}
-{"id": "i-create_table-2", "query": "make a new table called orders", "expected_sources": ["api/create_table.md"]}
-{"id": "i-create_table-3", "query": "define a table with a custom primary key", "expected_sources": ["api/create_table.md"]}
-{"id": "i-create_table-4", "query": "define a new table in snake case", "expected_sources": ["api/create_table.md"]}
-{"id": "i-create_table-5", "query": "create a table inside the main database", "expected_sources": ["api/create_table.md"]}
+{"id": "i-create_table-1", "query": "add a customers table to my database", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
+{"id": "i-create_table-2", "query": "make a new table called orders", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
+{"id": "i-create_table-3", "query": "define a table with a custom primary key", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
+{"id": "i-create_table-4", "query": "define a new table in snake case", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
+{"id": "i-create_table-5", "query": "create a table inside the main database", "expected_sources": ["api/create_table.md", "guides/data-modeling-tips.md"]}
 {"id": "i-add_field-1", "query": "add an email column to a table", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
 {"id": "i-add_field-2", "query": "define a required text field on a table", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
 {"id": "i-add_field-3", "query": "add a status field with fixed choices", "expected_sources": ["api/add_field.md", "guides/data-types.md", "guides/tables-and-fields.md"]}
