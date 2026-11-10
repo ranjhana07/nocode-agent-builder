@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import typer
@@ -12,6 +13,11 @@ from nocode_agent.rag.ingest import ingest_corpus, load_corpus, splitter_config,
 from nocode_agent.rag.service import build_index, build_rag_stack
 
 app = typer.Typer(help="Build apps on the Nocode platform from plain English", no_args_is_help=True)
+
+
+@app.callback()
+def main(verbose: bool = typer.Option(False, "--verbose", "-v", help="Log warnings and retrieval fallbacks")) -> None:
+    logging.basicConfig(level=logging.INFO if verbose else logging.ERROR, format="%(levelname)s %(name)s: %(message)s")
 
 
 @app.command()
