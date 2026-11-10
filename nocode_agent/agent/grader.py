@@ -7,9 +7,11 @@ from pydantic import BaseModel, Field
 
 from nocode_agent.llm import structured_call
 
-GRADER_SYSTEM = """You grade retrieved documentation chunks for a question about a no-code platform API.
-Score each chunk from 0 to 1: 1 means it directly contains what is needed to answer or to call the right workflow,
-0.5 means related but incomplete, 0 means irrelevant. Return one grade per chunk using the given index."""
+GRADER_SYSTEM = (
+    "You grade retrieved documentation chunks for a question about a no-code platform API.\n"
+    "Score each chunk from 0 to 1: 1 means it directly contains what is needed to answer or to call the right workflow,\n"
+    "0.5 means related but incomplete, 0 means irrelevant. Return one grade per chunk using the given index."
+)
 
 
 class ChunkGrade(BaseModel):

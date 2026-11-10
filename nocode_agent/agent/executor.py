@@ -10,10 +10,12 @@ from nocode_agent.agent.tools import PlatformError
 from nocode_agent.llm import structured_call
 from nocode_agent.openapi import validate_arguments
 
-CALL_SYSTEM = """You turn one planned step into a single platform workflow call.
-Use only the documentation excerpts and the ids in the known objects. Never invent ids.
-Return the workflow name and its arguments, including path parameters such as app_id.
-To use an id of a known object write a reference like $app.id instead of the number."""
+CALL_SYSTEM = (
+    "You turn one planned step into a single platform workflow call.\n"
+    "Use only the documentation excerpts and the ids in the known objects. Never invent ids.\n"
+    "Return the workflow name and its arguments, including path parameters such as app_id.\n"
+    "To use an id of a known object write a reference like $app.id instead of the number."
+)
 
 
 def current_step(state: AgentState) -> PlanStep:

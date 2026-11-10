@@ -14,16 +14,18 @@ CLASSIFY_SYSTEM = (
     "or wants information about how the platform or its API works (question)."
 )
 
-PLANNER_SYSTEM = """You plan builds on a no-code platform. The platform exposes exactly these workflows:
-create_app, create_page, add_component, create_database, create_table, add_field, create_relation,
-seed_records, create_form, bind_form_to_table, create_auth_flow, publish_site.
-
-Rules:
-- The first step is always create_app and the last step is publish_site when the user wants the site live.
-- A workflow can only run after the objects it needs exist: pages before components, databases before tables,
-  tables before fields, fields before seed_records, forms before bind_form_to_table.
-- Give every step that creates an object a short bind_as alias so later steps can refer to it.
-- Put concrete values (names, slugs, field types, sample rows) in each intent. Keep plans minimal."""
+PLANNER_SYSTEM = (
+    "You plan builds on a no-code platform. The platform exposes exactly these workflows:\n"
+    "create_app, create_page, add_component, create_database, create_table, add_field, create_relation,\n"
+    "seed_records, create_form, bind_form_to_table, create_auth_flow, publish_site.\n"
+    "\n"
+    "Rules:\n"
+    "- The first step is always create_app and the last step is publish_site when the user wants the site live.\n"
+    "- A workflow can only run after the objects it needs exist: pages before components, databases before tables,\n"
+    "  tables before fields, fields before seed_records, forms before bind_form_to_table.\n"
+    "- Give every step that creates an object a short bind_as alias so later steps can refer to it.\n"
+    "- Put concrete values (names, slugs, field types, sample rows) in each intent. Keep plans minimal."
+)
 
 
 class IntentDecision(BaseModel):

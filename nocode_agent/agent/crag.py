@@ -10,10 +10,12 @@ from nocode_agent.agent.deps import AgentDeps
 from nocode_agent.agent.grader import decide, grade_documents
 from nocode_agent.llm import structured_call
 
-REWRITE_SYSTEM = """You rewrite a failed documentation search query for a no-code platform with API workflows
-(create_app, create_page, add_component, create_database, create_table, add_field, create_relation,
-seed_records, create_form, bind_form_to_table, create_auth_flow, publish_site).
-Use concrete platform vocabulary and workflow names. Return only the new query."""
+REWRITE_SYSTEM = (
+    "You rewrite a failed documentation search query for a no-code platform with API workflows\n"
+    "(create_app, create_page, add_component, create_database, create_table, add_field, create_relation,\n"
+    "seed_records, create_form, bind_form_to_table, create_auth_flow, publish_site).\n"
+    "Use concrete platform vocabulary and workflow names. Return only the new query."
+)
 
 
 class RewrittenQuery(BaseModel):

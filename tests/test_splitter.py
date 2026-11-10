@@ -6,33 +6,38 @@ from pathlib import Path
 from nocode_agent.rag.openapi_splitter import split_openapi
 from nocode_agent.rag.splitter import SplitterConfig, parse_front_matter, split_markdown, split_text
 
-SAMPLE = """---
-title: Sample doc
-doc_type: guide
-workflow: create_app
-version: "1.4"
----
-
-# Sample doc
-
-Intro paragraph.
-
-## Setup
-
-Step one.
-
-### Details
-
-Deep detail.
-
-## Limits
-
-```
-# not a heading
-```
-
-Limit text.
-"""
+SAMPLE = "
+".join(
+    [
+        '---',
+        'title: Sample doc',
+        'doc_type: guide',
+        'workflow: create_app',
+        'version: "1.4"',
+        '---',
+        '',
+        '# Sample doc',
+        '',
+        'Intro paragraph.',
+        '',
+        '## Setup',
+        '',
+        'Step one.',
+        '',
+        '### Details',
+        '',
+        'Deep detail.',
+        '',
+        '## Limits',
+        '',
+        '```',
+        '# not a heading',
+        '```',
+        '',
+        'Limit text.',
+    ]
+) + "
+"
 
 
 def test_front_matter_is_parsed() -> None:
