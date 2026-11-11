@@ -6,8 +6,7 @@ from pathlib import Path
 from nocode_agent.rag.openapi_splitter import split_openapi
 from nocode_agent.rag.splitter import SplitterConfig, parse_front_matter, split_markdown, split_text
 
-SAMPLE = "
-".join(
+SAMPLE = "\n".join(
     [
         '---',
         'title: Sample doc',
@@ -36,8 +35,7 @@ SAMPLE = "
         '',
         'Limit text.',
     ]
-) + "
-"
+) + "\n"
 
 
 def test_front_matter_is_parsed() -> None:
