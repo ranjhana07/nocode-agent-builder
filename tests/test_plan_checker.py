@@ -63,3 +63,17 @@ def test_planner_gives_up_after_the_replan_budget() -> None:
     state = build_graph(make_deps(llm, max_replans=1)).invoke({"request": "build me something"})
     assert state["status"] == "failed"
     assert llm.calls_for(BuildPlan) == 2
+
+
+def test_plan_only_stops_before_any_retrieval_or_call() -> None:
+    plan = BuildPlan(
+        summary="Orders portal",
+        steps=[PlanStep(workflow="create_app", intent="create Orders", bind_as="app"), PlanStep(workflow="create_page", intent="home page")],
+    )
+    llm = chat({IntentDecision: IntentDecision(kind="build"), BuildPlan: plan})
+    state = build_graph(make_deps(llm)).invoke({"request": "build orders", "plan_only": True})
+    assert state["status"] == "planned"
+    assert "1. create_app: create Orders" in state["answer"]
+    assert "2. create_page: home page" in state["answer"]
+    assert llm.calls_for(ToolInvocation) == 0
+    assert state.get("results", []) == []
