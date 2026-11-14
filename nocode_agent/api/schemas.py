@@ -36,6 +36,7 @@ class AgentRequest(BaseModel):
     intent: Literal["build", "question"] | None = None
     stream: bool = True
     dry_run: bool = False
+    plan_only: bool = False
 
 
 class AgentResponse(BaseModel):

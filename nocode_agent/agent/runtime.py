@@ -25,20 +25,20 @@ class AgentRuntime:
     deps: AgentDeps
 
     def run(
-        self, request: str, thread_id: str | None = None, intent: str | None = None, dry_run: bool = False
+        self, request: str, thread_id: str | None = None, intent: str | None = None, dry_run: bool = False, plan_only: bool = False
     ) -> dict[str, Any]:
         config = {"configurable": {"thread_id": thread_id or uuid.uuid4().hex}}
-        payload: dict[str, Any] = {"request": request, "dry_run": dry_run}
+        payload: dict[str, Any] = {"request": request, "dry_run": dry_run, "plan_only": plan_only}
         if intent:
             payload["intent"] = intent
         return self.graph.invoke(payload, config)
 
     def stream(
-        self, request: str, thread_id: str | None = None, intent: str | None = None, dry_run: bool = False
+        self, request: str, thread_id: str | None = None, intent: str | None = None, dry_run: bool = False, plan_only: bool = False
     ) -> Iterator[dict[str, Any]]:
         thread = thread_id or uuid.uuid4().hex
         config = {"configurable": {"thread_id": thread}}
-        payload: dict[str, Any] = {"request": request, "dry_run": dry_run}
+        payload: dict[str, Any] = {"request": request, "dry_run": dry_run, "plan_only": plan_only}
         if intent:
             payload["intent"] = intent
         mark = time.perf_counter()

@@ -125,3 +125,9 @@ def test_step_events_carry_timings(client: TestClient) -> None:
     events = parse_sse(client.post("/agent/run", json={"request": "build me an orders app"}).text)
     steps = [payload for name, payload in events if name == "step"]
     assert steps and all(isinstance(step["elapsed_ms"], int) and step["elapsed_ms"] >= 0 for step in steps)
+
+
+def test_plan_only_through_the_api(client: TestClient) -> None:
+    body = client.post("/agent/run", json={"request": "build me an orders app", "stream": False, "plan_only": True}).json()
+    assert body["status"] == "planned"
+    assert body["results"] == []

@@ -126,6 +126,9 @@ def advance_node(state: AgentState) -> dict[str, Any]:
 
 def finalize_node(state: AgentState) -> dict[str, Any]:
     plan = state.get("plan", [])
+    if state.get("plan_only") and plan and not state.get("validation_errors"):
+        listing = "; ".join(f"{position}. {step.workflow}: {step.intent}" for position, step in enumerate(plan, start=1))
+        return {"status": "planned", "answer": f"{state.get('plan_summary', 'Plan')}: {listing}", "trace": ["finished: planned"]}
     done = len(state.get("results", []))
     failed = bool(state.get("validation_errors"))
     status = "failed" if failed or done < len(plan) else "completed"
