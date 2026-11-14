@@ -8,7 +8,9 @@ def route_intent(state: AgentState) -> str:
 
 
 def route_after_plan(state: AgentState) -> str:
-    return "prepare_step" if state.get("plan") else "finalize"
+    if state.get("plan") and not state.get("plan_only"):
+        return "prepare_step"
+    return "finalize"
 
 
 def route_after_retrieval(state: AgentState) -> str:
