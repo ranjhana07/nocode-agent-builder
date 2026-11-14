@@ -181,7 +181,34 @@ builder eval agent --local --limit 30
 
 ## Results
 
-RESULTS_PLACEHOLDER
+### Retrieval
+
+Measured with `builder ingest --reset` followed by `builder eval retrieval --show-misses` against the corpus in `docs/` (246 chunks from 41 markdown files and the OpenAPI spec) and the 210 labelled queries in `data/eval/retrieval_queries.jsonl`. A query counts as a hit at rank k when one of the top k chunks comes from a source file listed for it. Dense retrieval uses `sentence-transformers/all-MiniLM-L6-v2` in ChromaDB, reranking uses `cross-encoder/ms-marco-MiniLM-L-6-v2`, both on CPU (Python 3.12.10, 12 logical cores). Raw numbers are in `results/retrieval.csv` and `results/retrieval.json`.
+
+| system | hit@1 | hit@3 | hit@5 | MRR |
+| --- | --- | --- | --- | --- |
+| vector only (baseline) | 0.805 | 0.952 | 0.962 | 0.875 |
+| bm25 only | 0.724 | 0.862 | 0.919 | 0.797 |
+| hybrid bm25 + vector (rrf) | 0.843 | 0.957 | 0.967 | 0.897 |
+| hybrid + rerank | 0.805 | 0.948 | 0.981 | 0.881 |
+
+Split by query type (hit@1 / hit@5), 150 questions and 60 informal task phrasings:
+
+| system | questions | task phrasings |
+| --- | --- | --- |
+| vector only (baseline) | 0.840 / 0.980 | 0.717 / 0.917 |
+| hybrid bm25 + vector (rrf) | 0.927 / 0.980 | 0.633 / 0.933 |
+| hybrid + rerank | 0.860 / 0.980 | 0.667 / 0.983 |
+
+What this shows: hybrid fusion improves hit@1 and MRR over vector only on questions, mostly because exact workflow names and field names match lexically. Reranking raised hit@5 on the informal phrasings (0.917 to 0.983) but did not improve hit@1 on this corpus. The corpus is small and every workflow has its own page, so the baseline is already strong at hit@5 and the gaps are modest. Four queries are missed in the top 5 by hybrid + rerank: `q002`, `q023`, `q093` and `i-bind_form_to_table-5`.
+
+Multi-query expansion needs an LLM and no `ANTHROPIC_API_KEY` was available for this run, so the multi-query variant was not measured. `builder eval retrieval --multi-query` adds it as a fifth row.
+
+Per-query latency is in the CSV. It was taken on a busy machine and should be read as an upper bound.
+
+### Agent
+
+Groundedness (LLM-as-judge), correctness and the wrong-tool-call rate need a model key, and none was set when this repository was prepared, so no agent numbers are reported here. `builder eval agent` runs the 150 questions through the question path of the graph, scores each answer with the two judges, compares the workflow the agent names with the expected one, and writes either a LangSmith experiment or `results/agent_eval.json`. Run it with your own key to get the numbers for your model.
 
 ## Project layout
 
