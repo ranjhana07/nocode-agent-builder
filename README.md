@@ -131,9 +131,10 @@ Build something:
 ```
 builder run "build me a customer portal with a customers table, a signup form that saves into it, and email sign in"
 builder run "build me a blog with an authors table" --dry-run
+builder run "build me a blog with an authors table" --plan-only
 ```
 
-`--dry-run` plans, retrieves, drafts and validates every call, but does not call the platform. Ids returned by earlier steps are simulated so later steps can still refer to them. In drafted arguments a string such as `$app.id` is replaced with the id saved under the alias `app`.
+`--dry-run` plans, retrieves, drafts and validates every call, but does not call the platform. Ids returned by earlier steps are simulated so later steps can still refer to them. `--plan-only` stops right after the plan has passed the dependency check and prints it. In drafted arguments a string such as `$app.id` is replaced with the id saved under the alias `app`.
 
 Inspect retrieval:
 

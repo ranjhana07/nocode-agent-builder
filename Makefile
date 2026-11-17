@@ -22,7 +22,7 @@ dataset:
 	builder dataset
 
 eval-retrieval:
-	builder eval retrieval
+	builder eval retrieval --show-misses
 
 eval-agent:
 	builder eval agent
