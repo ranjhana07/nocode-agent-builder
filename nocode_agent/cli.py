@@ -93,6 +93,20 @@ def run(
 
 
 @app.command()
+def history(thread: str) -> None:
+    from nocode_agent.agent.history import load_thread_state
+
+    state = load_thread_state(get_settings().checkpoint_db, thread)
+    if state is None:
+        typer.echo(f"no saved run for thread {thread}")
+        raise typer.Exit(code=1)
+    for line in state.get("trace", []):
+        typer.echo(f"  {line}")
+    typer.echo(f"status: {state.get('status', 'unknown')}")
+    typer.echo(state.get("answer", ""))
+
+
+@app.command()
 def serve(host: str = "0.0.0.0", port: int = 8000) -> None:
     import uvicorn
 
