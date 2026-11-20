@@ -142,6 +142,7 @@ Inspect retrieval:
 builder search "make my site live" --mode hybrid --k 5
 builder search "slug rules" --doc-type guide
 builder doctor
+builder history <thread id>
 ```
 
 API:
